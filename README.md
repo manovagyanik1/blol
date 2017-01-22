@@ -1,4 +1,4 @@
-# CultApi
+# Template for node-hapi-typescript-inversify projects
 
 ## Prerequisites
 ```
