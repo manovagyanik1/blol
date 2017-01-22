@@ -1,0 +1,11 @@
+node_modules
+build
+typings
+.idea
+data
+src/**/*.js
+src/**/*.map
+/**/*.map
+/**/*.js
+!/src/migrations/**/*.js
+pdfs/*

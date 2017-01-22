@@ -1,0 +1,25 @@
+{
+  "server": {
+    "protocol": "http",
+    "apiUrl": "localhost",
+    "port": 5000,
+    "webAppProtocol": "http",
+    "webAppUrl": "localhost",
+    "webAppPort": 4200
+  },
+  "database": {
+    "mysql": {
+      "username": "root",
+      "password": "root",
+      "host": "localhost",
+      "port": "3306",
+      "db": "cultApp"
+    },
+    "cache":{
+      "host": "localhost",
+      "port": 6379,
+      "database":15,
+      "partition": "cache"
+    }
+  }
+}
