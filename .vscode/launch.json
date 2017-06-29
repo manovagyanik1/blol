@@ -9,19 +9,19 @@
             "type": "node",
             "request": "launch",
             "name": "nodemon",
-            "runtimeExecutable": "nodemon",
+            "runtimeExecutable": "${workspaceRoot}/node_modules/nodemon/bin/nodemon.js",
             "runtimeArgs": [
                 "--debug=5858 --watch src/**/*.ts"
             ],
             "env": {
-                "PORT": 3000
+                "PORT": "3000"
             },
             "program": "${workspaceRoot}/src/index.ts",
             "outFiles": [
                 "${workspaceRoot}/build/src/*.js"
             ],
             "sourceMaps": true,
-            "restart": true,
+            "restart": false,
             "port": 5858,
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen"

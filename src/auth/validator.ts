@@ -15,6 +15,4 @@ export const authenticateUser = function (decoded, request, callback) {
   } else if(request.headers.cookie){
     cacheKey = cookie.parse(request.headers.cookie)[GlobalConstants.AUTH_COOKIE_KEY];
   }
-
-  
 };
