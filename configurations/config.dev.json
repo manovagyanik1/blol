@@ -14,12 +14,6 @@
       "host": "localhost",
       "port": "3306",
       "db": "lolmenow"
-    },
-    "cache":{
-      "host": "localhost",
-      "port": 6379,
-      "database":15,
-      "partition": "cache"
     }
   }
 }

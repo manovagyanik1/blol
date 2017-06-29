@@ -25,15 +25,7 @@ export default (): IPlugin => {
                             cookieKey: GlobalConstants.AUTH_COOKIE_KEY
                         }
                     );
-                    var cache = require('./../../../utils/cache-utils').cache;
-                    cache.on('connect',(err) =>{
-                        if (err){
-                            console.log('error', "error while starting redis cache::: ", err);
-                            throw err;
-                        }else{
-                            console.log("Redis connected.")
-                        }
-                    });
+                    
                 }
             });
         },

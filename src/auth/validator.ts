@@ -16,18 +16,5 @@ export const authenticateUser = function (decoded, request, callback) {
     cacheKey = cookie.parse(request.headers.cookie)[GlobalConstants.AUTH_COOKIE_KEY];
   }
 
-  cacheUtils.validateTokenOnRedis(cacheUtils.cache, cacheKey, function (err, cached) {
-    if(!err && cached){
-
-      console.log("info", "user::", decoded.userFbId, "successfully authenticated.");
-      isAuthenticated = true;
-      
-      return callback(null, isAuthenticated, decoded);
-
-    } else {
-      console.log('info', 'User is not logged in');
-      console.log('error', "Error while authenticating user:: ", err);
-      return callback(null, isAuthenticated, null);
-    }
-  });
+  
 };
