@@ -7,6 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "migrate": "sequelize db:migrate",
     "compile": "tsc --skipLibCheck",
+    "tsc": "tsc --watch",
     "start": "PORT=3000 npm i && nodemon build/src/index.js & tsc --watch"
   },
   "author": "markhanday",

@@ -20,10 +20,32 @@ server.connection({
     routes: {
         cors: true
     },
-    labels: ['V1','CRMRoutes']
+    labels: ['V1', 'CRMRoutes']
 });
 
-console.log("server going to run at : "+server.info.uri);
+
+server.route({
+    method: 'GET',
+    path: '/feed',
+    handler: function (request, reply){
+        return reply('hola!');
+
+    }
+});
+
+
+server.route({
+    method: 'GET',
+    path: '/feedsa',
+    handler: function (request, reply){
+        return reply('hol    a!');
+
+    }
+});
+
+
+
+console.log("server going to run at : " + server.info.uri);
 
 //  Setup Hapi Plugins
 const pluginsPath = __dirname + '/libs/plugins/';

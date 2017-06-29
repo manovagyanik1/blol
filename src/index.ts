@@ -15,5 +15,5 @@ Server.start(() => {
     if (config.get('cron:startCron')) {
         new Crons();
     }
-    console.log('Server running at:', Server.info.uri);
+    console.log('Server running at:  ', Server.info.uri);
 });

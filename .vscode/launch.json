@@ -13,6 +13,7 @@
             "runtimeArgs": [
                 "--inspect=5858"
             ],
+            "preLaunchTask": "tsc",
             "env": {
                 "PORT": "3000"
             },
@@ -21,7 +22,7 @@
                 "${workspaceRoot}/build/src/*.js"
             ],
             "sourceMaps": true,
-            "restart": false,
+            "restart": true,
             "port": 5858,
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen"
