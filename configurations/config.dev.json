@@ -10,10 +10,10 @@
   "database": {
     "mysql": {
       "username": "root",
-      "password": "root",
+      "password": "pass@123",
       "host": "localhost",
       "port": "3306",
-      "db": "cultApp"
+      "db": "lolmenow"
     },
     "cache":{
       "host": "localhost",
