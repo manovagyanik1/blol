@@ -11,7 +11,6 @@ console.log(`Running enviroment ${process.env.NODE_ENV || "dev"}`);
 
 //Starting Application Server
 Server.start(() => {
-    
     if (config.get('cron:startCron')) {
         new Crons();
     }

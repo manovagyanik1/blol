@@ -1,6 +1,6 @@
 import {Crons} from "./index";
 import sequelize = require("sequelize");
-export default class testCron {
+export default class TestCron {
     constructor(){
         new Crons.CronJob({
             cronTime: '1 * * * * *',

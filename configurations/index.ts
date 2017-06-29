@@ -10,9 +10,9 @@ export default class Conf implements IServerConfig {
     constructor() {
         const env = process.env.NODE_ENV || "dev";
         const configFolder = __dirname;
-        const configFileName = "config."+env+".json";
+        const configFileName = "config." + env + ".json";
 
-        const configFile = configFolder+"/"+configFileName;
+        const configFile = configFolder + "/" + configFileName;
 
         const conf = nconf
             .argv()

@@ -20,10 +20,10 @@ server.connection({
     routes: {
         cors: true
     },
-    labels: ['V1','CRMRoutes']
+    labels: ['V1', 'CRMRoutes']
 });
 
-console.log("server going to run at : "+server.info.uri);
+console.log("server going to run at : " + server.info.uri);
 
 //  Setup Hapi Plugins
 const pluginsPath = __dirname + '/libs/plugins/';

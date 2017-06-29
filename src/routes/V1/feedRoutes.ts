@@ -1,19 +1,16 @@
 import * as Joi from 'joi';
-import {TestController} from "../../controllers/testController";
+import {FeedController} from "../../controllers/feedController";
 
 export = [
     {
         method: 'GET',
-        path: '/addresses/{id}',
-        handler: TestController.getAddressByID,
-        config:{
+        path: '/feed',
+        handler: FeedController.getFeed,
+        config: {
             auth: false,
-            tags: ['api', 'address'],
-            description: 'get address by ID',
+            tags: ['api', 'feed'],
+            description: 'get feed',
             validate: {
-                params: {
-                    id: Joi.number().integer(),
-                }
             },
             plugins: {
                 'hapi-swagger': {
@@ -24,5 +21,8 @@ export = [
             }
         }
     }
+
+
+
 ];
 

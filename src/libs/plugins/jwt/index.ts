@@ -25,7 +25,6 @@ export default (): IPlugin => {
                             cookieKey: GlobalConstants.AUTH_COOKIE_KEY
                         }
                     );
-                    
                 }
             });
         },
