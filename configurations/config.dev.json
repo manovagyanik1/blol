@@ -2,7 +2,7 @@
   "server": {
     "protocol": "http",
     "apiUrl": "localhost",
-    "port": 5000,
+    "port": 3000,
     "webAppProtocol": "http",
     "webAppUrl": "localhost",
     "webAppPort": 4200
