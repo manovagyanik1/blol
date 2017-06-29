@@ -7,7 +7,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "migrate": "sequelize db:migrate",
     "compile": "tsc --skipLibCheck",
-    "dev-start": "npm i && npm run migrate && nodemon src/index.js & tsc --watch",
+    "dev-start-2": "npm i && npm run migrate && nodemon src/index.js & tsc --watch",
+    "dev-start": "npm i && nodemon src/index.js & tsc --watch",
     "start": "node src/index.js"
   },
   "author": "markhanday",
