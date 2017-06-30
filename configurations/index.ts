@@ -27,7 +27,8 @@ export default class Conf implements IServerConfig {
         this.conf = conf;
     }
 
-    public get (key: string){
+    // it returns some value.. update that in interface as well.
+    public get (key: string) {
         return this.conf.get(key);
     }
 }
