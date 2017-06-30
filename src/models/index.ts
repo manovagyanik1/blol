@@ -5,9 +5,7 @@ import mongoose = require('mongoose');
 import container from "../libs/ioc";
 import {IUserModel, UserSchema} from "./schemas/user";
 import {IUser} from "./interfaces/user";
-
 import {IPostModel, PostSchema} from "./schemas/post";
-
 import {IPost} from "./interfaces/post";
 import {IComment} from "./interfaces/comment";
 import {IUserReaction} from "./interfaces/UserReaction";

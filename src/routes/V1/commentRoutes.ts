@@ -1,15 +1,15 @@
 import * as Joi from 'joi';
-import {FeedController} from "../../controllers/feedController";
+import {CommentController} from "../../controllers/commentController";
 
 export = [
     {
         method: 'GET',
-        path: '/feed',
-        handler: FeedController.getFeed,
+        path: '/comment/{postId}',
+        handler: CommentController.getComment,
         config: {
             auth: false,
-            tags: ['api', 'feed'],
-            description: 'get feed',
+            tags: ['api', 'comment'],
+            description: 'get comment',
             validate: {
             },
             plugins: {
