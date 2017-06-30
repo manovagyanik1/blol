@@ -1,14 +1,9 @@
 import * as Hapi from 'hapi';
 import BaseController from "./baseController";
-import {AddressService} from "../services/addressService";
+import {FeedService} from "../services/feedService";
+
 export class FeedController extends BaseController{
     public static getFeed(request: Hapi.Request, reply: Hapi.IReply) {
-        AddressService.getAddressByID(request.params['id']).then((address)=> {
-            reply({
-                address: address
-            });
-        }).catch((err)=> {
-            reply(err);
-        });
+        FeedService.getFeed(1, 1);
     }
 }

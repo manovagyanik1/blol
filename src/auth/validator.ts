@@ -10,9 +10,9 @@ export const authenticateUser = function (decoded, request, callback) {
 
   console.log('debug', 'inside validate, decoded ', decoded);
 
-  if (request.headers.authorization){
+  if (request.headers.authorization) {
     cacheKey = request.headers.authorization;
-  } else if (request.headers.cookie){
+  } else if (request.headers.cookie) {
     cacheKey = cookie.parse(request.headers.cookie)[GlobalConstants.AUTH_COOKIE_KEY];
   }
 };

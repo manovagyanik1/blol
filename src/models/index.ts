@@ -5,6 +5,12 @@ import mongoose = require('mongoose');
 import container from "../libs/ioc";
 import {IUserModel, UserSchema} from "./schemas/user";
 import {IUser} from "./interfaces/user";
+
+import {IPostModel, PostSchema} from "./schemas/post";
+
+import {IPost} from "./interfaces/post";
+import {IComment} from "./interfaces/comment";
+import {IUserReaction} from "./interfaces/UserReaction";
 import {IServerConfig} from "../../configurations/interfaces";
 const config = container.get<IServerConfig>("IServerConfig");
 
@@ -41,8 +47,8 @@ this.models.user = connection.model<IUserModel>("User", UserSchema);
 
 let user: IUser = {
         email: "foo@bar.com",
-        firstName: "Brian",
-        lastName: "Love"
+        fullName: "Brian",
+        nickName: "Love"
       };
 
       //create user and return promise
@@ -50,6 +56,28 @@ let user: IUser = {
  .then(result => {
      console.log(result);
  });
+
+this.models.post = connection.model<IPostModel>("Post", PostSchema);
+
+let post: IPost = {
+        url: "www.google.com",
+        type: "IMAGE",
+      };
+
+      //create user and return promise
+ new this.models.post(post).save()
+ .then(result => {
+     console.log(result);
+ });
+
+
+
+
+
+
+
+
+
 // for (let item in modelFiles) {
 //     if (modelFiles.hasOwnProperty(item)) { 
 //         let modelName = modelFiles[item](sequelize);

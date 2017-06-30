@@ -1,4 +1,4 @@
-export interface IUser {
+export interface IComment {
   email?: string;
   fullName?: string;
   nickName?: string;

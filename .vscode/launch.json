@@ -11,12 +11,12 @@
             "name": "nodemon",
             "runtimeExecutable": "${workspaceRoot}/node_modules/nodemon/bin/nodemon.js",
             "runtimeArgs": [
-                "--debug=5858 --watch src/**/*.ts"
+                "--inspect=5858"
             ],
             "env": {
                 "PORT": "3000"
             },
-            "program": "${workspaceRoot}/src/index.ts",
+            "program": "${workspaceRoot}/build/src/index.js",
             "outFiles": [
                 "${workspaceRoot}/build/src/*.js"
             ],
