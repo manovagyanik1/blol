@@ -8,7 +8,7 @@
     "test": "mocha build/src/test",
     "migrate": "sequelize db:migrate",
     "compile": "tsc --watch",
-    "start": "PORT=3000 npm i && nodemon build/src/index.js & tsc --watch"
+    "start": "PORT=3000 npm i && nodemon build/src/index.js & tsc --watch --sourcemap"
   },
   "author": "markhanday",
   "license": "ISC",
@@ -75,6 +75,7 @@
     "chai": "^4.0.2",
     "del": "^3.0.0",
     "gulp": "^3.9.1",
+    "gulp-shell": "^0.6.3",
     "gulp-ts": "^0.3.0",
     "gulp-typescript": "^3.1.7",
     "merge2": "^1.0.3",

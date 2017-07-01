@@ -11,7 +11,7 @@
             "name": "nodemon",
             "runtimeExecutable": "${workspaceRoot}/node_modules/nodemon/bin/nodemon.js",
             "runtimeArgs": [
-                "--inspect=5858"
+                "--inspect=5959"
             ],
             "env": {
                 "PORT": "3000"
@@ -22,7 +22,7 @@
             ],
             "sourceMaps": true,
             "restart": false,
-            "port": 5858,
+            "port": 5959,
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen"
         },
