@@ -73,9 +73,14 @@
     "@types/mongodb": "^2.2.6",
     "@types/mongoose": "^4.7.18",
     "chai": "^4.0.2",
+    "del": "^3.0.0",
     "gulp": "^3.9.1",
+    "gulp-ts": "^0.3.0",
+    "gulp-typescript": "^3.1.7",
+    "merge2": "^1.0.3",
     "mocha": "^3.4.2",
     "nodemon": "^1.11.0",
+    "run-sequence": "^2.0.0",
     "tslint": "^4.0.1"
   }
 }

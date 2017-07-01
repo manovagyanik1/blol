@@ -2,20 +2,9 @@
     "version": "0.1.0",
     "tasks": [
         {
-            "taskName": "tsc",
-            "command": "tsc",
-            "args": ["-w"],
-            "isShellCommand": true,
-            "isBackground": true,
-            "problemMatcher": "$tsc-watch"
-        },
-        {
-            "taskName": "build",
-            "command": "build",
-            "isBuildCommand": true,
-            "args": [
-                "PORT=3000 npm i && nodemon build/src/index.js & tsc --watch"
-            ]
+            "taskName": "gulp",
+            "command": "gulp",
+            "isShellCommand": true
         }
     ]
 }

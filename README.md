@@ -8,6 +8,13 @@
 ```
 docker-compose up
 ```
+## Debugging setup for vscode
+```
+Run gulp from command line or from vscode by typing run task
+
+Then click DEBUG run on vscode 
+```
+
 
 ## Debugging setup for Intellij idea/Webstorm
 1. Choose a port for debugging, say 56745. Expose this port in Dockerfile
