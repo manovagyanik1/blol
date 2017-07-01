@@ -6,3 +6,4 @@ data
 !/src/migrations/**/*.js
 pdfs/*
 .DS_Store
+*.log
