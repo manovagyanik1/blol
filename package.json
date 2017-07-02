@@ -46,6 +46,7 @@
     "grunt": "^1.0.1",
     "hapi": "^15.2.0",
     "hapi-auth-jwt2": "^7.2.3",
+    "hapi-pagination": "^1.20.0",
     "hapi-swagger": "^7.4.0",
     "html-pdf": "^2.1.0",
     "inert": "^4.0.2",
