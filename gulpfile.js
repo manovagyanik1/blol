@@ -13,8 +13,8 @@ gulp.task('default', function(callback) {
     runSequence('build', callback);
 });
 
-gulp.task('git-pull', function(callback){
-    runSequence('pull', 'install');
+gulp.task('pull', function(callback){
+    runSequence('git-pull', 'install');
 });
 
 gulp.task('build', function(callback){
@@ -45,7 +45,7 @@ gulp.task('typescript', shell.task('npm run compile'));
 gulp.task('create-dump', shell.task('mongodump -d lolmenow --out=mongodb.backup'));
 gulp.task('create-db-from-dump', shell.task('mongorestore mongodb.backup --drop'));
 
-gulp.task('pull', shell.task('git pull'));
+gulp.task('git-pull', shell.task('git pull'));
 gulp.task('install', shell.task('npm install'));
 
 // gulp.task('watch', function(){
