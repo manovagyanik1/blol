@@ -4,7 +4,13 @@ import {CommentService} from "../services/commentService";
 
 export class CommentController extends BaseController {
     public static getComment(request: Hapi.Request, reply: Hapi.IReply) {
-        // Testing feed service
-        reply(CommentService.getComment(1, 1));
+        const {postId} = request.params;
+        const {limit, page, pagination} = request.query;
+        reply(CommentService.getComment({postId}));
     }
+
+    // public static getUserReaction(request: Hapi.Request, reply: Hapi.IReply){
+    //     const {commentId, userId} = request.query;
+    //     reply()
+    // }
 }

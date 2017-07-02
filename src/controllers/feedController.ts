@@ -2,9 +2,11 @@ import * as Hapi from 'hapi';
 import BaseController from "./baseController";
 import {FeedService} from "../services/feedService";
 
-export class FeedController extends BaseController{
+export class FeedController extends BaseController {
+
+    // returns the list of feed
     public static getFeed(request: Hapi.Request, reply: Hapi.IReply) {
-        // Testing feed service
-        reply(FeedService.getFeed(1, 1));
+        
+        reply(FeedService.getFeed());
     }
 }

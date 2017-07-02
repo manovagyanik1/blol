@@ -11,6 +11,11 @@ export = [
             tags: ['api', 'comment'],
             description: 'get comment',
             validate: {
+                  query: {
+                    limit: Joi.number().integer(),
+                    page: Joi.number().integer(),
+                    pagination: Joi.boolean(),
+                }
             },
             plugins: {
                 'hapi-swagger': {
