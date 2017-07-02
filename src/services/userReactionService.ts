@@ -9,7 +9,7 @@ public static getUserReaction(args: {
         userId: String }): Promise<any> {
     return new Promise((resolve, reject) => {
             const {targetId, userId} = args;
-            models.userReaction.find({
+            models.userReaction.findOne({
                 targetId,
                 userId
             }).then((data) => {
