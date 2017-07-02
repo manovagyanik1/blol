@@ -7,7 +7,6 @@ export = [
         path: '/feed',
         handler: FeedController.getFeed,
         config: {
-            auth: 'jwt',
             tags: ['api', 'feed'],
             description: 'get feed',
             validate: {

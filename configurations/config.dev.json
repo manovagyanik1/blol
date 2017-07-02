@@ -7,6 +7,9 @@
     "webAppUrl": "localhost",
     "webAppPort": 4200
   },
+  "auth": {
+    "enabled": true
+  },
   "key":{
     "privateKey": "lolmenow"
   },
