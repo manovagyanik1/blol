@@ -46,9 +46,9 @@ this.models.userReaction = connection.model<IUserReactionModel>("UserReaction", 
 
 let comment: IComment = {
     text: "sample comment",
-    userId: "123",
+    userId: mongoose.Types.ObjectId(),
     displayName: "tom",
-    postId: "789",
+    postId: mongoose.Types.ObjectId(),
 };
 
 //create comment and return promise
@@ -58,8 +58,8 @@ let comment: IComment = {
  });
 
  let userReactionPost: IUserReaction = {
-    targetId: mongoose.Types.ObjectId(),
-    userId: mongoose.Types.ObjectId(),
+     targetId: mongoose.Types.ObjectId(),
+     userId: mongoose.Types.ObjectId(),
      reaction: "LOL",
      type: "POST"
  };
