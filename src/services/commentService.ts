@@ -3,9 +3,11 @@ import { models } from '../models';
 export class CommentService extends BaseService {
 
     // needs to be paginated
-    public static getComment(fromTimeStamp: number, numberOfItems: number): Promise<any> {
+    public static getComment(postId: string): Promise<any> {
         return new Promise((resolve, reject) => {
-            models.post.find({}).then((data) => {
+            models.comment.find({
+                postId
+            }).then((data) => {
                 resolve(data);
             }).catch((error) => {
                 reject(error.message);

@@ -6,9 +6,9 @@ export interface ICommentModel extends IComment, Document {
 
 export var CommentSchema: Schema = new Schema({
   text: String,
-  userId: Schema.Types.ObjectId,
+  userId: String,
   displayName: String,
-  postId: Schema.Types.ObjectId,
+  postId: String,
 }, { timestamps: true });
 
 

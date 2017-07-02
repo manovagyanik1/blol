@@ -41,8 +41,8 @@ const connection: mongoose.Connection = mongoose.createConnection(dbUrl);
 //create models
 this.models.user = connection.model<IUserModel>("User", UserSchema);
 this.models.post = connection.model<IPostModel>("Post", PostSchema);
-this.models.comment = connection.model<ICommentModel>("Post", CommentSchema);
-this.models.userReaction = connection.model<IUserReactionModel>("Post", UserReactionSchema);
+this.models.comment = connection.model<ICommentModel>("Comment", CommentSchema);
+this.models.userReaction = connection.model<IUserReactionModel>("UserReaction", UserReactionSchema);
 
 let comment: IComment = {
     text: "sample comment",
@@ -58,26 +58,26 @@ let comment: IComment = {
  });
 
  let userReactionPost: IUserReaction = {
-     targetId: "123",
-     userId: "123",
+    targetId: mongoose.Types.ObjectId(),
+    userId: mongoose.Types.ObjectId(),
      reaction: "LOL",
      type: "POST"
  };
 //create userReaction and return promise
- new this.models.UserReaction(userReactionPost).save()
+ new this.models.userReaction(userReactionPost).save()
  .then(result => {
      console.log(result);
  });
 
 
 let userReactionComment: IUserReaction = {
-    targetId: "234",
-    userId: "123",
+    targetId: mongoose.Types.ObjectId(),
+    userId: mongoose.Types.ObjectId(),
     reaction: "LIKE",
     type: "COMMENT",
 };
 //create userReaction and return promise
- new this.models.UserReaction(userReactionComment).save()
+ new this.models.userReaction(userReactionComment).save()
  .then(result => {
      console.log(result);
  });
