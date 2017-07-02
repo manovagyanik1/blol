@@ -44,33 +44,40 @@ this.models.post = connection.model<IPostModel>("Post", PostSchema);
 this.models.comment = connection.model<ICommentModel>("Post", CommentSchema);
 this.models.userReaction = connection.model<IUserReactionModel>("Post", UserReactionSchema);
 
-let post: IPost = {
-        url: "www.google.com",
-        type: "IMAGE",
-      };
+let comment: IComment = {
+    text: "sample comment",
+    userId: "123",
+    displayName: "tom",
+    postId: "789",
+};
 
-//create user and return promise
- new this.models.post(post).save()
+//create comment and return promise
+ new this.models.comment(comment).save()
  .then(result => {
      console.log(result);
  });
 
-let user: IUser = {
-        email: "foo@bar.com",
-        fullName: "Brian",
-        nickName: "Love"
-      };
-
-//create user and return promise
- new this.models.user(user).save()
+ let userReactionPost: IUserReaction = {
+     targetId: "123",
+     userId: "123",
+     reaction: "LOL",
+     type: "POST"
+ };
+//create userReaction and return promise
+ new this.models.UserReaction(userReactionPost).save()
  .then(result => {
      console.log(result);
  });
 
-// for (let item in modelFiles) {
-//     if (modelFiles.hasOwnProperty(item)) { 
-//         let modelName = modelFiles[item](sequelize);
-//         console.log("model name = " + modelName);
-//         models[item] = modelName;
-//     }
-// }
+
+let userReactionComment: IUserReaction = {
+    targetId: "234",
+    userId: "123",
+    reaction: "LIKE",
+    type: "COMMENT",
+};
+//create userReaction and return promise
+ new this.models.UserReaction(userReactionComment).save()
+ .then(result => {
+     console.log(result);
+ });

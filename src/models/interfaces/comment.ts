@@ -1,6 +1,6 @@
 export interface IComment {
-  email?: string;
-  fullName?: string;
-  nickName?: string;
-  profilePicUrl?: string;
+  text?: string;
+  userId?: any;
+  displayName?: string;
+  postId?: any;
 }
