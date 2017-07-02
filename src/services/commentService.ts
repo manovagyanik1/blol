@@ -6,7 +6,6 @@ import {Schema} from 'mongoose';
 import UserReactionService​​ from './userReactionService';
 export class CommentService extends BaseService {
 
-// needs to be paginated
 public static getComment(args: {postId: string}): Promise<any> {
     return new Promise((resolve, reject) => {
             const {postId} = args;
@@ -15,19 +14,18 @@ public static getComment(args: {postId: string}): Promise<any> {
             }).then((comments: [ICommentModel]) => {
                 // check if there is any comment
                 // if there is then iterate through all comments and check if the user has liked it.
-                for ( const index in comments) {
-                    if (comments.hasOwnProperty(index)) {
-                        const comment: ICommentModel = comments[index];
+                if (comments && comments.length > 0) {
+                    let response = []; // comeup with schema of response also
+                    return Promise.all( comments.map((comment: ICommentModel) => {
                         UserReactionService​​.getUserReaction({
-                            'targetId': comment._id,
-                            'userId': "595656da98a0021cd9ee3f43"
-                        }).then((userReaction: IUserReactionModel) => {
-                            let response = comment;
-                            response["serReaction"] = userReaction.reaction;
-                            let r = [response];
-                            resolve(r);
-                        });
-                    }
+                                'targetId': comment._id,
+                                'userId': "595656da98a0021cd9ee3f43" // hard-coded userId, TODO:
+                            }).then((userReaction: IUserReactionModel) => {
+                                return Object.assign({}, comment, {"userReaction": userReaction.reaction});
+                            });
+                    }));
+                } else {
+                    resolve([]); // no comment found
                 }
             }).catch((error) => {
                 reject(error.message);

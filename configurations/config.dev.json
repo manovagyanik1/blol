@@ -7,6 +7,12 @@
     "webAppUrl": "localhost",
     "webAppPort": 4200
   },
+  "key":{
+    "privateKey": "lolmenow"
+  },
+  "project": {
+    "name": "lolmenow"
+  },
   "database": {
     "mysql": {
       "username": "root",

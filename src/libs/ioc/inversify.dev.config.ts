@@ -1,4 +1,3 @@
-
 import { interfaces } from "inversify";
 import {IServerConfig} from "../../../configurations/interfaces";
 import Configurations from "../../../configurations";

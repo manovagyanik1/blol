@@ -9,14 +9,13 @@ const config = container.get<IServerConfig>("IServerConfig");
 export default (): IPlugin => {
     return {
         register: (server: Hapi.Server) => {
-
             server.register({
                 register: require('hapi-auth-jwt2')
             }, (error) => {
                 if (error) {
                     console.log('error', error);
                 }else {
-                    server.auth.strategy('jwt', 'jwt',Boolean(config.get("auth:enabled")),
+                    server.auth.strategy('jwt', 'jwt', Boolean(config.get("auth:enabled")),
                         {
                             key: config.get('key:privateKey'),
                             validateFunc: authenticateUser,
