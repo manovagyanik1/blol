@@ -2,7 +2,7 @@
   "server": {
     "protocol": "http",
     "apiUrl": "localhost",
-    "port": 8080,
+    "port": 3000,
     "webAppProtocol": "http",
     "webAppUrl": "localhost",
     "webAppPort": 4200
@@ -10,7 +10,7 @@
   "facebook": {
     "appSecret": "a15dfa3968c29bf10d48cfc4cd9fab40",
     "appId": "335195490233143",
-    "redirectUri": "http://localhost:3000",
+    "redirectUri": "http://localhost:3000/v1/login/callback",
     "apiVersion": "v2.9",
     "clientToken": "14105b034fc43eb444d755ec5d57dfd7"
   },

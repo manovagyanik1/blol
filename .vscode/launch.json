@@ -14,7 +14,7 @@
                 "--inspect=5959"
             ],
             "env": {
-                "PORT": "80"
+                "PORT": "3000"
             },
             "program": "${workspaceRoot}/build/src/index.js",
             "outFiles": [

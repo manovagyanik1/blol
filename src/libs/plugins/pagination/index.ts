@@ -6,7 +6,7 @@ export default (): IPlugin => {
         register: (server: Hapi.Server) => {
             const opts = {
                 routes: {
-                    include: ['*'],  exclude: [] // Emptying include list will disable pagination
+                    include: [''],  exclude: ['*'] // Emptying include list will disable pagination
                 }
             };
             server.register({
