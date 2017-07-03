@@ -7,6 +7,12 @@
     "webAppUrl": "localhost",
     "webAppPort": 4200
   },
+  "facebook": {
+    "app-secret": "a15dfa3968c29bf10d48cfc4cd9fab40",
+    "app-id": "335195490233143",
+    "api-version": "v2.9",
+    "client-token": "14105b034fc43eb444d755ec5d57dfd7"
+  },
   "auth": {
     "enabled": true
   },
