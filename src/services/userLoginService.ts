@@ -26,7 +26,7 @@ export class UserLoginService extends BaseService {
         var expires = res.expires ? res.expires : 0;
         FB.options({accessToken});
 
-        FB.api('/me', function (res) {
+        FB.api('/me', {fields: 'id, name, email'}, function (res) {
             if (res && res.error) {
                 if (res.error.code === 'ETIMEDOUT') {
                     console.log('request timeout');
@@ -34,7 +34,7 @@ export class UserLoginService extends BaseService {
                     console.log('error', res.error);
                 }
             }else {
-                const {id, name} = res;
+                const {id, name, email} = res;
             }
         });
     });
