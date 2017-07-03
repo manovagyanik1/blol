@@ -1,12 +1,13 @@
 import * as Joi from 'joi';
-import {FeedController} from "../../controllers/feedController";
+import {FeedApi} from "../../api/feedApi";
 
 export = [
     {
         method: 'GET',
         path: '/feed',
-        handler: FeedController.getFeed,
+        handler: FeedApi.getFeed,
         config: {
+            auth: false,
             tags: ['api', 'feed'],
             description: 'get feed',
             validate: {

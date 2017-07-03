@@ -1,11 +1,11 @@
 import * as Joi from 'joi';
-import {CommentController} from "../../controllers/commentController";
+import {CommentApi} from "../../api/commentApi";
 
 export = [
     {
         method: 'GET',
         path: '/comment/{postId}',
-        handler: CommentController.getComment,
+        handler: CommentApi.getComment,
         config: {
             auth: false,
             tags: ['api', 'comment'],
