@@ -3,7 +3,8 @@ import { models } from '../models';
 import {ICommentModel} from '../models/schemas/comment';
 import {IUserReactionModel} from '../models/schemas/userReaction';
 import {Schema} from 'mongoose';
-import UserReactionService​​ from './userReactionService';
+import {UserReactionService}​​ from './userReactionService';
+
 export class CommentService extends BaseService {
 
 public static getComments(args: {postId: string}): Promise<any> {

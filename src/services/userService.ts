@@ -3,13 +3,10 @@ import { models } from '../models';
 import container from "../libs/ioc";
 import { IServerConfig } from "../../configurations/interfaces";
 
-
-
-
 const FB = require("fb");
 const config = container.get<IServerConfig>("IServerConfig");
 
-export class UserLoginService extends BaseService {
+export class UserService extends BaseService {
 
     // return the login token if the user already exists in the db,
     // create a new user if the user is not there in the db.
@@ -41,10 +38,6 @@ export class UserLoginService extends BaseService {
             }
         });
     });
-    }
-
-    public static isNewUser(): boolean {
-        return true;
     }
 
 }
