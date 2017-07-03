@@ -6,12 +6,7 @@ export class CommentController extends BaseController {
     public static getComment(request: Hapi.Request, reply: Hapi.IReply) {
         const {postId} = request.params;
         const {limit, page, pagination} = request.query;
-        const response = CommentService.getComment({postId});
+        const response = CommentService.getComments({postId});
         reply(response);
     }
-
-    // public static getUserReaction(request: Hapi.Request, reply: Hapi.IReply){
-    //     const {commentId, userId} = request.query;
-    //     reply()
-    // }
 }

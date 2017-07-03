@@ -6,7 +6,7 @@ import {Schema} from 'mongoose';
 import UserReactionService​​ from './userReactionService';
 export class CommentService extends BaseService {
 
-public static getComment(args: {postId: string}): Promise<any> {
+public static getComments(args: {postId: string}): Promise<any> {
     return new Promise((resolve, reject) => {
             const {postId} = args;
             models.comment.find({
@@ -15,15 +15,17 @@ public static getComment(args: {postId: string}): Promise<any> {
                 // check if there is any comment
                 // if there is then iterate through all comments and check if the user has liked it.
                 if (comments && comments.length > 0) {
-                    let response = []; // comeup with schema of response also
-                    return Promise.all( comments.map((comment: ICommentModel) => {
-                        UserReactionService​​.getUserReaction({
+                    // let response = []; // comeup with schema of response also
+                     return resolve(Promise.all(comments.map((comment: ICommentModel) => {
+                        return UserReactionService​​.getUserReaction({
                                 'targetId': comment._id,
                                 'userId': "595656da98a0021cd9ee3f43" // hard-coded userId, TODO:
                             }).then((userReaction: IUserReactionModel) => {
-                                return Object.assign({}, comment, {"userReaction": userReaction.reaction});
+                                return Object.assign({}, comment.toObject(), {"userReaction": userReaction.reaction});
+                            }).catch((err) => {
+                                console.log(err);
                             });
-                    }));
+                    })));
                 } else {
                     resolve([]); // no comment found
                 }
