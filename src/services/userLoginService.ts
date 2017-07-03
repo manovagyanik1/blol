@@ -2,9 +2,8 @@ import BaseService from "./baseService";
 import { models } from '../models';
 import container from "../libs/ioc";
 import { IServerConfig } from "../../configurations/interfaces";
-var Promise = require("bluebird");
 
-const FB = Promise.promisifyAll(require("fb"));
+const FB = require("fb");
 const config = container.get<IServerConfig>("IServerConfig");
 
 export class UserLoginService extends BaseService {
