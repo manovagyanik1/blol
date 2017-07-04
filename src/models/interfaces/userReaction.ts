@@ -1,6 +1,8 @@
+import {ReactionType} from '../../constants/enums/reactionType';
+
 export interface IUserReaction {
   targetId: any;
   userId: any;
-  reaction: "LOL"| "HAHA"| "WOW"| "CLAP"| "LIKE";
+  reaction: ReactionType;
   type: "COMMENT"| "POST";
 }

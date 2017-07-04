@@ -1,6 +1,7 @@
 import * as fs from 'fs';
 import * as path from 'path';
 import * as _ from 'lodash';
+import {Model} from 'mongoose';
 import mongoose = require('mongoose');
 import container from "../libs/ioc";
 
@@ -34,12 +35,21 @@ fs.readdirSync(__dirname)
 
 // tslint:disable-next-line:max-line-length
 const dbUrl = "mongodb://" + config.get('database:mongodb:host') + ':' + config.get('database:mongodb:port') + '/' + config.get('database:mysql:db');
-export const models = {} as any;
+
 mongoose.Promise = require('bluebird');
 const connection: mongoose.Connection = mongoose.createConnection(dbUrl);
 
+interface IModel {
+    User: Model<IUserModel>;
+    Post: Model<IPostModel>;
+    Comment: Model<ICommentModel>;
+    UserReaction: Model<IUserReactionModel>;
+};
+
 //create models
-this.models.user = connection.model<IUserModel>("User", UserSchema);
-this.models.post = connection.model<IPostModel>("Post", PostSchema);
-this.models.comment = connection.model<ICommentModel>("Comment", CommentSchema);
-this.models.userReaction = connection.model<IUserReactionModel>("UserReaction", UserReactionSchema);
+export const models: IModel = {
+    User: connection.model<IUserModel>("User", UserSchema),
+    Post: connection.model<IPostModel>("Post", PostSchema),
+    Comment: connection.model<ICommentModel>("Comment", CommentSchema),
+    UserReaction: connection.model<IUserReactionModel>("UserReaction", UserReactionSchema)
+};

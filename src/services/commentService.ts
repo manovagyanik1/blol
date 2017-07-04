@@ -10,7 +10,7 @@ export class CommentService extends BaseService {
 public static getComments(args: {postId: string}): Promise<any> {
     return new Promise((resolve, reject) => {
             const {postId} = args;
-            models.comment.find({
+            models.Comment.find({
                 postId: postId
             }).then((comments: [ICommentModel]) => {
                 // check if there is any comment

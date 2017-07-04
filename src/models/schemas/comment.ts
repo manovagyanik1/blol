@@ -12,4 +12,4 @@ export var CommentSchema: Schema = new Schema({
 }, { timestamps: true });
 
 
-export const User: Model<ICommentModel> = model<ICommentModel>("Comment", CommentSchema);
+export const Comment: Model<ICommentModel> = model<ICommentModel>("Comment", CommentSchema);

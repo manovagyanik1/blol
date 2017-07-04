@@ -10,4 +10,4 @@ export var PostSchema: Schema = new Schema({
 }, { timestamps: true });
 
 
-export const User: Model<IPostModel> = model<IPostModel>("Post", PostSchema);
+export const Post: Model<IPostModel> = model<IPostModel>("Post", PostSchema);

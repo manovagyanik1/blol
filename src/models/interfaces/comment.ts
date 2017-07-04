@@ -1,6 +1,4 @@
-import {IObjectId} from './objectId';
-
-export interface IComment extends IObjectId {
+export interface IComment {
   text?: string;
   userId?: any;
   displayName?: string;

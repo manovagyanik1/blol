@@ -1,9 +1,12 @@
 import BaseService from "./baseService";
 import { models } from '../models';
 import {Schema} from 'mongoose';
+import {IUserReactionModel} from '../models/schemas/userReaction';
+import {ReactionType} from '../constants/enums/reactionType';
+import {TargetType} from '../constants/enums/targetType';
 
 export class UserReactionService​​ extends BaseService {
-// needs to be paginated
+    // needs to be paginated
     public static getUserReaction(
         args: {
             targetId: Schema.Types.ObjectId,
@@ -11,7 +14,7 @@ export class UserReactionService​​ extends BaseService {
             Promise<any> {
         return new Promise((resolve, reject) => {
                 const {targetId, userId} = args;
-                models.userReaction.findOne({
+                models.UserReaction.findOne({
                     targetId,
                     userId
                 }).then((data) => {
@@ -22,21 +25,19 @@ export class UserReactionService​​ extends BaseService {
             });
     }
 
-    public static react(
+    public static react(args: {
         targetId: Schema.Types.ObjectId,
         userId: Schema.Types.ObjectId,
-        reaction: models.userReaction.reaction,
-        type: IUserReaction.Type):
+        reaction: ReactionType,
+        type: TargetType}):
             Promise<any> {
 
-        var UserReaction = models.userReaction;
-        var newUserReaction = UserReaction(
+        const {targetId, userId, reaction, type} = args;
+        return new models.UserReaction({
             targetId,
             userId,
             reaction,
             type
-
-        );
-        newUserReaction.save();
+        }).save();
     }
 }

@@ -4,7 +4,7 @@ import { IUser } from "../interfaces/user";
 export interface IUserModel extends IUser, Document {
 }
 
-export var UserSchema: Schema = new Schema({
+export const UserSchema: Schema = new Schema({
   email: String,
   fullName: String,
   nickName: String,
