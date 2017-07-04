@@ -1,3 +1,4 @@
+import { IUserModel } from '../models/schemas/user';
 import * as Hapi from 'hapi';
 import BaseApi from "./baseApi";
 import {UserReactionService} from "../services/userReactionService";
@@ -5,8 +6,9 @@ import {UserReactionService} from "../services/userReactionService";
 export class UserReactionApi extends BaseApi {
 
     public static react(request: Hapi.Request, reply: Hapi.IReply) {
-        const {targetId, userId, reaction, type} = request.query;
-        // TODO: get the userId from request.headers after validation
-        return reply(UserReactionService.react({targetId, userId, reaction, type}));
+        const user: IUserModel = request.auth.credentials;
+        const {targetId, reaction, type} = request.query;
+
+        return reply(UserReactionService.react({targetId, userId: user._id, reaction, type}));
     }
 }

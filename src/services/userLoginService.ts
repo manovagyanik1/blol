@@ -1,4 +1,3 @@
-import { ITokenData } from '../auth/iTokenData';
 import JWTUtils from '../utils/JWTUtils';
 import BaseService from "./baseService";
 import { models } from '../models';
