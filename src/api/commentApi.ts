@@ -4,8 +4,7 @@ import {CommentService} from "../services/commentService";
 
 export class CommentApi extends BaseApi {
     public static getComment(request: Hapi.Request, reply: Hapi.IReply) {
-        const {postId} = request.params;
-        const {limit, page, pagination} = request.query;
+        const {params: {postId}, query: {limit, page, pagination}} = request;
         const response = CommentService.getComments({postId});
         reply(response);
     }

@@ -33,7 +33,6 @@ export class UserLoginService extends BaseService {
                         reject(res.error);
                     } else {
                         const {id, name, email, picture: {data: {url}}} = res;
-                        const tokenData: ITokenData​​ = {facebookId: id, fullName: name, email};
                         models.User.findOneAndUpdate({
                             facebookId: id,
                             fullName: name,
@@ -42,7 +41,7 @@ export class UserLoginService extends BaseService {
                         }, {}, {upsert: true, new: true, setDefaultsOnInsert: true})
                         .then((data) => {
                             // get JWT token and insert into request/response
-                            const jwtToken: string = JWTUtils.signJWTToken(tokenData);
+                            const jwtToken: string = JWTUtils.signJWTToken(data.toObject());
                             resolve({token: jwtToken});
                         });
                     }
