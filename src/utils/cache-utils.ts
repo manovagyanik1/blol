@@ -56,7 +56,7 @@ export const setKeyAndExpiryPromise = function(cacheClient: any, key: string, va
 };
 
 export const setKeyAndExpiry = function(cacheClient,key, value, ttl, callback){
-    cacheClient.setex(key, ttl, value,(err) =>{
+    cacheClient.setex(key, ttl, value, (err) =>{
         callback(err);
     });
 };
@@ -74,21 +74,21 @@ export const getValue = function(cacheClient:RedisClient,key):Promise<string>{
             }
         })
     })
-}
+};
 
 export const validateTokenOnRedis = function(cacheClient, key, callback){
-    cacheClient.get(key,(err,reply) => {
+    cacheClient.get(key, (err, reply) => {
         console.log('key:: ' + key);
         console.log('err:: ' + err);
         console.log('reply:: ' + reply);
-        if(err){
+        if (err){
             callback(err);
         }
 
-        if(!reply) {
+        if (!reply) {
             callback(null, null);
         } else {
-            callback(null,reply);
+            callback(null, reply);
         }
     });
 };

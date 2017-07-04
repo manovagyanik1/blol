@@ -11,8 +11,8 @@ export default (): IPlugin => {
                     register: require('hapi-swagger'),
                     options: {
                         info: {
-                            title: 'Cult Api Documentation',
-                            description: 'API for cult web & mobile apps.',
+                            title: 'Lolmenow Api Documentation',
+                            description: 'API for lolmenow web & mobile apps.',
                             version: '1.0'
                         },
                         securityDefinitions: {
@@ -24,11 +24,11 @@ export default (): IPlugin => {
                         },
                         tags: [
                             {
-                                'name': 'cult',
-                                'description': 'Cult App  - Api'
+                                'name': 'lolmenow',
+                                'description': 'lolmenow App  - Api'
                             }
                         ],
-                        documentationPath: '/docs',
+                        documentationPath: '/',
                         pathPrefixSize: 2,
                         sortTags: 'name'
                     }

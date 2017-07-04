@@ -1,9 +1,20 @@
-import * as ORM from "sequelize";
 import * as fs from 'fs';
 import * as path from 'path';
 import * as _ from 'lodash';
-import {Sequelize} from 'sequelize';
+import {Model} from 'mongoose';
+import mongoose = require('mongoose');
 import container from "../libs/ioc";
+
+import {IUserModel, UserSchema} from "./schemas/user";
+import {IPostModel, PostSchema} from "./schemas/post";
+import {ICommentModel, CommentSchema} from "./schemas/comment";
+import {IUserReactionModel, UserReactionSchema} from "./schemas/userReaction";
+
+import {IPost} from "./interfaces/post";
+import {IUser} from "./interfaces/user";
+import {IComment} from "./interfaces/comment";
+import {IUserReaction} from "./interfaces/UserReaction";
+
 import {IServerConfig} from "../../configurations/interfaces";
 const config = container.get<IServerConfig>("IServerConfig");
 
@@ -17,38 +28,28 @@ fs.readdirSync(__dirname)
     .forEach(function (file) {
         let hidden = /^\./.test(file);
         let fileExtension = path.extname(file);
-        if (!hidden && fileExtension == '.js') {    //getting only js files
-            modelFiles = _.assign(modelFiles,require(path.join(__dirname, file)));
+        if (!hidden && fileExtension === '.js') {    //getting only js files
+            modelFiles = _.assign(modelFiles, require(path.join(__dirname, file)));
         }
     });
 
-// 'mysql://username:password@host:port/cultApp'
+// tslint:disable-next-line:max-line-length
+const dbUrl = "mongodb://" + config.get('database:mongodb:host') + ':' + config.get('database:mongodb:port') + '/' + config.get('database:mysql:db');
 
-const dbUrl = 'mysql:' + config.get('database:mysql:username') + ':' + config.get('database:mysql:password') +
-    '@' + config.get('database:mysql:host') + '/' + config.get('database:mysql:db');
+mongoose.Promise = require('bluebird');
+const connection: mongoose.Connection = mongoose.createConnection(dbUrl);
 
-
-const options = {
-    dialect: 'mysql',
-        define:{
-            underscoredAll: false,
-            timestamps: true,
-            logging: true,
-            createdAt : "createdAt",
-            updatedAt : "updatedAt",
-            freezeTableName: true,
-            paranoid :true
-        },
-    // timezone: "+05:30",
+interface IModel {
+    User: Model<IUserModel>;
+    Post: Model<IPostModel>;
+    Comment: Model<ICommentModel>;
+    UserReaction: Model<IUserReactionModel>;
 };
 
-export const sequelize: Sequelize = new ORM(dbUrl, options );
-
-export const models = {} as any;
-
-
-for(let item in modelFiles){
-    let modelName = modelFiles[item](sequelize);
-    console.log("model name = " + modelName);
-    models[item]= modelName;
-}
+//create models
+export const models: IModel = {
+    User: connection.model<IUserModel>("User", UserSchema),
+    Post: connection.model<IPostModel>("Post", PostSchema),
+    Comment: connection.model<ICommentModel>("Comment", CommentSchema),
+    UserReaction: connection.model<IUserReactionModel>("UserReaction", UserReactionSchema)
+};

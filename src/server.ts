@@ -6,7 +6,7 @@ import { IPlugin } from "./libs/plugins/interfaces";
 import { IServerConfig } from "../configurations/interfaces";
 
 const config = container.get<IServerConfig>("IServerConfig");
-const port = process.env.PORT || config.get("server:port");
+const port: string = process.env.PORT || config.get("server:port");
 
 //log all promise rejections
 process.on('unhandledRejection', function(error, promise) {
@@ -16,14 +16,16 @@ process.on('unhandledRejection', function(error, promise) {
 const server = new Hapi.Server();
 
 server.connection({
-    port: port,
+    port,
     routes: {
-        cors: true
+        cors: {
+            origin: ['*'] // although this is default
+        }
     },
-    labels: ['V1','CRMRoutes']
+    labels: ['V1', 'CRMRoutes']
 });
 
-console.log("server going to run at : "+server.info.uri);
+console.log("server going to run at : " + server.info.uri);
 
 //  Setup Hapi Plugins
 const pluginsPath = __dirname + '/libs/plugins/';

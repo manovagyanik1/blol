@@ -12,7 +12,7 @@ fs.readdirSync(__dirname)
     .forEach(function (file) {
         let hidden = /^\./.test(file);
         let fileExtension = path.extname(file);
-        if (!hidden && fileExtension == '.js') {    //getting only js files
+        if (!hidden && fileExtension === '.js') {    //getting only js files
             console.log(file);
             routes = routes.concat(require(path.join(__dirname, file)));
         }

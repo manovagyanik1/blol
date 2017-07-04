@@ -1,6 +1,6 @@
 import {IPlugin, IPluginInfo} from "../interfaces";
 import * as Hapi from "hapi";
-import * as moment from 'moment'
+import * as moment from 'moment';
 
 export default (): IPlugin => {
     return {
@@ -11,15 +11,15 @@ export default (): IPlugin => {
             addTimeToResponsePlugin = (() => {
                 let _register : any = function (server, options, next) {
 
-                    server.ext('onPreResponse',(request, reply)=>{
+                    server.ext('onPreResponse',(request, reply) => {
 
                         let meta = {
                             ts: moment()
                         };
 
-                        if(request.response.isBoom) {
+                        if (request.response.isBoom) {
 
-                            if(request.response.output.payload.meta){
+                            if (request.response.output.payload.meta){
                                 request.response.output.payload.meta.ts = meta.ts;
                             } else {
                                 request.response.output.payload.meta = meta;
@@ -27,11 +27,11 @@ export default (): IPlugin => {
 
                         } else {
 
-                            if(!request.response.source) {
+                            if (!request.response.source) {
                                 request.response.source = {};
                             }
 
-                            if(request.response.source.meta) {
+                            if (request.response.source.meta) {
                                 request.response.source.meta.ts = meta.ts;
                             } else {
                                 request.response.source.meta = meta;
