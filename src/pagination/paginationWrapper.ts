@@ -15,9 +15,12 @@ export class PaginationWrapper {
         };
     }
 
-    private static getNextPageUrl(args: {results: Array<any>, request: Hapi.Request, pageSize: number}): String {
+    private static getNextPageUrl(args: {results: Array<any>, request: Hapi.Request, pageSize: number}): String | null {
         const {results, request, pageSize} = args;
         const lastResult = results && results.length ? results[results.length - 1] : null;
+        if (!lastResult) {
+            return null;
+        }
         const {path, query} = request;
         const queryCopy = Object.assign({}, query);
         queryCopy['beforeTimeStamp'] = lastResult['createdAt'];
@@ -27,10 +30,13 @@ export class PaginationWrapper {
 
     private static getPreviousPageUrl(args: {results: Array<any>, request: Hapi.Request, pageSize: number}): String {
         const {results, request, pageSize} = args;
-        const lastResult = results && results.length ? results[0] : null;
+        const firstResult = results && results.length ? results[0] : null;
+        if (!firstResult) {
+            return null;
+        }
         const {path, query} = request;
         const queryCopy = Object.assign({}, query);
-        queryCopy['afterTimeStamp'] = lastResult['createdAt'];
+        queryCopy['afterTimeStamp'] = firstResult['createdAt'];
         const queryString = PaginationWrapper.getQueryString(queryCopy);
         return queryString ? `${path}?${queryString}` : path;
     }
