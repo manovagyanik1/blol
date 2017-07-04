@@ -1,3 +1,4 @@
+import { ActionType } from '../constants/enums/actionType';
 import { IUserModel } from './../models/schemas/user';
 import BaseService from "./baseService";
 import { models } from '../models';
@@ -19,7 +20,7 @@ export class UserReactionService extends BaseService {
                 return models.UserReaction.findOne(query).exec();
             }
 
-    public static react(args: {
+    public static insertReaction(args: {
         targetId: Schema.Types.ObjectId,
         userId: Schema.Types.ObjectId,
         reaction: ReactionType,
@@ -33,5 +34,23 @@ export class UserReactionService extends BaseService {
             reaction,
             type
         }).save();
+    }
+
+    public static deleteReaction(args: {
+        targetId: Schema.Types.ObjectId,
+        userId: Schema.Types.ObjectId,
+        reaction: ReactionType,
+        type: TargetType}):
+            Promise<any> {
+
+        const {targetId, userId, reaction, type} = args;
+        return models.UserReaction.findOne({
+            targetId,
+            userId,
+            reaction,
+            type
+        })
+        .remove()
+        .exec();
     }
 }

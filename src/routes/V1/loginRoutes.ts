@@ -3,7 +3,7 @@ import {FacebookLoginApi} from '../../api/facebookLoginApi';
 
 export = [
     {
-        method: 'GET',
+        method: 'GET', // TODO: change it to post, let it be 'GET' for test
         path: '/login/callback',
         handler: FacebookLoginApi.getLoginToken,
         config: {
@@ -11,7 +11,7 @@ export = [
             tags: ['api', 'login', 'facebook' ],
             description: 'api to get the login token and the cookie',
             validate: {
-                  query: {
+                query: {
                     code: Joi.string(),
                 }
             },

@@ -1,3 +1,4 @@
+import { Comment } from './../models/schemas/comment';
 import { BeforeAfter } from '../constants/enums/beforeAfter';
 import { IUserModel } from '../models/schemas/user';
 import BaseService from "./baseService";
@@ -33,5 +34,16 @@ export class CommentService extends BaseService {
                 return []; // no comment found
             }
         });
+    }
+
+// TODO: can we avoid retry comment schenario
+    public static postComment(args: {postId: string, text: string, user: IUserModel}): Promise<any> {
+        const {postId, text, user} = args;
+        return new models.Comment({
+            text,
+            postId,
+            userId: user._id,
+            displayName: user.fullName // TODO: change to nickname
+        }).save();
     }
 }

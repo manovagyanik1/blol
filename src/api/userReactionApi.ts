@@ -5,10 +5,17 @@ import {UserReactionService} from "../services/userReactionService";
 
 export class UserReactionApi extends BaseApi {
 
-    public static react(request: Hapi.Request, reply: Hapi.IReply) {
+    public static deleteReaction(request: Hapi.Request, reply: Hapi.IReply) {
         const user: IUserModel = request.auth.credentials;
-        const {targetId, reaction, type} = request.query;
+        const {targetId, reaction, type} = request.payload;
 
-        return reply(UserReactionService.react({targetId, userId: user._id, reaction, type}));
+        return reply(UserReactionService.deleteReaction({targetId, userId: user._id, reaction, type}));
+    }
+
+    public static insertReaction(request: Hapi.Request, reply: Hapi.IReply) {
+        const user: IUserModel = request.auth.credentials;
+        const {targetId, reaction, type} = request.payload;
+
+        return reply(UserReactionService.insertReaction({targetId, userId: user._id, reaction, type}));
     }
 }

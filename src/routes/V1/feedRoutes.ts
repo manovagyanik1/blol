@@ -12,10 +12,9 @@ export = [
             description: 'get feed',
             validate: {
                   query: {
-                    // Your other parameters ...
-                    limit: Joi.number().integer(),
-                    page: Joi.number().integer(),
-                    pagination: Joi.boolean()
+                    beforeTimeStamp: Joi.date().timestamp(),
+                    afterTimeStamp: Joi.date().timestamp(),
+                    pageSize: Joi.number()
                 }
             },
             plugins: {
