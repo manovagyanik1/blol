@@ -40,4 +40,5 @@ export default class GlobalConstants {
 
     public static MAX_NUMBER_OF_FREE_CLASSES_PER_USER: number = 1;
     public static ADVANCE_MEMBERSHIP_DAYS: number = 30;
+    public static TOKEN_KEY: string = 'X-AT';
 }

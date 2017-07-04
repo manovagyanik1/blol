@@ -18,7 +18,7 @@ export class UserLoginService extends BaseService {
                 client_secret: config.get('facebook:appSecret'),
                 redirect_uri: config.get('facebook:redirectUri'),
                 code
-            }, function (res) {
+            }, (res) => {
                 if (res && res.error) {
                     reject(res.error);
                 }
@@ -27,15 +27,23 @@ export class UserLoginService extends BaseService {
                 var expires = res.expires ? res.expires : 0;
                 FB.options({accessToken});
 
-                FB.api('/me', function (res) {
+                FB.api('/me', {fields: 'id, name, email, picture.type(large)'}, (res) => {
                     if (res && res.error) {
                         reject(res.error);
                     } else {
-                        const {id, name, email} = res;
+                        const {id, name, email, picture: {data: {url}}} = res;
                         const tokenData = {id, name, email};
-                        // get JWT token and insert into request/response
-                        const jwtToken: string = JWTUtils.signJWTToken(tokenData);
-                        resolve({token: jwtToken});
+                        models.User.findOneAndUpdate({
+                            facebookId: id,
+                            fullName: name,
+                            email,
+                            profilePicUrl: url,
+                        }, {}, {upsert: true, new: true, setDefaultsOnInsert: true})
+                        .then((data) => {
+                            // get JWT token and insert into request/response
+                            const jwtToken: string = JWTUtils.signJWTToken(tokenData);
+                            resolve({token: jwtToken});
+                        });
                     }
                 });
             });

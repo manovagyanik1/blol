@@ -1,2 +1,5 @@
-import { IUserReactionModel } from "../models/schemas/userReaction";
+export default class Gen {
+    public static someFunction() {
 
+    }
+}

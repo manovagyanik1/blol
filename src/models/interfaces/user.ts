@@ -1,6 +1,7 @@
 export interface IUser {
-  email?: string;
-  fullName?: string;
+  facebookId: number;
+  email: string;
+  fullName: string;
   nickName?: string;
   profilePicUrl?: string;
 }

@@ -5,6 +5,7 @@ export interface IUserModel extends IUser, Document {
 }
 
 export const UserSchema: Schema = new Schema({
+  facebookId: Number,
   email: String,
   fullName: String,
   nickName: String,
