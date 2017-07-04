@@ -1,3 +1,4 @@
+import { ITokenData } from '../auth/iTokenData';
 import JWTUtils from '../utils/JWTUtils';
 import BaseService from "./baseService";
 import { models } from '../models';
@@ -32,7 +33,7 @@ export class UserLoginService extends BaseService {
                         reject(res.error);
                     } else {
                         const {id, name, email, picture: {data: {url}}} = res;
-                        const tokenData = {id, name, email};
+                        const tokenData: ITokenData​​ = {facebookId: id, fullName: name, email};
                         models.User.findOneAndUpdate({
                             facebookId: id,
                             fullName: name,

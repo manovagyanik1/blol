@@ -1,12 +1,12 @@
 'use strict';
+import { ITokenData } from './iTokenData';
 import * as cookie from 'cookie';
 import * as cacheUtils from '../utils/cache-utils';
 import GlobalConstants from "../constants/globalConstants";
 import { models } from '../models';
 
-// TODO: define model for decoded
-export const authenticateUser = function (decoded, request, callback) {
-  models.User.findOne({facebookId: decoded['id']})
+export const authenticateUser = function (decoded: ITokenData, request, callback) {
+  models.User.findOne({facebookId: decoded.facebookId})
         .then((data) => {
           if (data !== null ) {
             callback(null, true);
