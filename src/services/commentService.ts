@@ -17,13 +17,13 @@ export class CommentService extends BaseService {
             createdAt: query
         })
         .limit(pageSize)
-        .sort('createdAt')
+        .sort({'createdAt': -1}) // descending sorting
         .then((comments: [ICommentModel]) => {
             if (comments && comments.length > 0) {
                 return Promise.all(comments.map((comment: ICommentModel) => {
                     return UserReactionService.getUserReaction({
-                        'targetId': comment._id,
-                        'userId': user._id
+                        targetId: comment._id,
+                        user
                     }).then((userReaction: IUserReactionModel) => {
                         const commentReaction = userReaction && userReaction.reaction ? userReaction.reaction : null;
                         return Object.assign({}, comment.toObject(), {"userReaction": commentReaction});

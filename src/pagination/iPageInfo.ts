@@ -1,4 +1,4 @@
-export interface IpageInfo {
+export interface IPageInfo {
     nextPageUrl: String;
     previousPageUrl: String;
 }

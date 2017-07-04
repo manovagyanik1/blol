@@ -9,24 +9,22 @@ export class FeedService extends BaseService {
 
     public static getFeed(args: {user: IUserModel}): Promise<any> {
         const {user} = args;
-        return models.Post.find({}).
-        then((feeds: [IPostModel]) => {
-            if (feeds && feeds.length > 0) {
-                return Promise.all(feeds.map((feed: IPostModel) => {
-                    return UserReactionService.getUserReaction({
-                        'targetId': feed._id,
-                        'userId': user._id,
-                    }).then((userReaction: IUserReactionModel) => {
-                        const postReaction = userReaction && userReaction.reaction ? userReaction.reaction : null;
-                        return Object.assign({}, feed.toObject(), {"userReaction": postReaction});
-                    })
-                    .catch((err) => {
-                        console.log(err);
-                    });
-                }));
-            } else {
-                return [];
-            }
+        return models.Post.find({})
+            .then((feeds: [IPostModel]) => {
+                if (feeds && feeds.length > 0) {
+                    return Promise.all(feeds.map((feed: IPostModel) => {
+                        return UserReactionService.getUserReaction({
+                                targetId: feed._id,
+                                user
+                            })
+                            .then((userReaction: IUserReactionModel) => {
+                            const postReaction = userReaction && userReaction.reaction ? userReaction.reaction : null;
+                            return Object.assign({}, feed.toObject(), {"userReaction": postReaction});
+                        });
+                    }));
+                } else {
+                    return [];
+                }
         });
     }
 }

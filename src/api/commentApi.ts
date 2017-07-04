@@ -1,3 +1,4 @@
+import { PaginationWrapper } from '../pagination/paginationWrapper';
 import { BeforeAfter } from '../constants/enums/beforeAfter';
 import { IUserModel } from '../models/schemas/user';
 import * as Hapi from 'hapi';
@@ -11,6 +12,9 @@ export class CommentApi extends BaseApi {
         const type = (beforeTimeStamp) ? BeforeAfter.BEFORE : BeforeAfter.AFTER;
         const timestamp = (beforeTimeStamp) ? beforeTimeStamp : afterTimestamp;
         const response = CommentService.getComments({postId, user, timestamp, type, pageSize});
-        reply(response);
+
+        response.then((results) => {
+            reply(PaginationWrapper.wrap({results, pageSize, request}));
+        });
     }
 }

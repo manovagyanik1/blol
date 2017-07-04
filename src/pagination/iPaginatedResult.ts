@@ -1,7 +1,6 @@
 import {IPageInfo} from './iPageInfo';
 
 export interface IPaginatedResult {
-    results: [];
+    results: Array<any>;
     pageInfo: IPageInfo;
-    metaData: any;
 }
