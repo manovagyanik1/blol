@@ -10,14 +10,11 @@ export = [
             auth: false,
             tags: ['api', 'login', 'facebook' ],
             description: 'api to get the login token and the cookie',
-            // validate: {
-            //       query: {
-            //         // Your other parameters ...
-            //         limit: Joi.number().integer(),
-            //         page: Joi.number().integer(),
-            //         pagination: Joi.boolean()
-            //     }
-            // },
+            validate: {
+                  query: {
+                    code: Joi.string(),
+                }
+            },
 
             plugins: {
                 'hapi-swagger': {

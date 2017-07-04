@@ -1,10 +1,8 @@
+import JWTUtils from '../utils/JWTUtils';
 import BaseService from "./baseService";
 import { models } from '../models';
 import container from "../libs/ioc";
 import { IServerConfig } from "../../configurations/interfaces";
-
-
-
 
 const FB = require("fb");
 const config = container.get<IServerConfig>("IServerConfig");
@@ -36,8 +34,12 @@ export class UserLoginService extends BaseService {
                 } else {
                     console.log('error', res.error);
                 }
-            }else {
-                const {id, name} = res;
+            } else {
+                const {id, name, email} = res;
+                const tokenData = {id, name, email};
+                // get JWT token and insert into request/response
+                const jwtToken: string = JWTUtils.signJWTToken(tokenData);
+                return jwtToken;
             }
         });
     });
