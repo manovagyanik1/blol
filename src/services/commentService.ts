@@ -8,31 +8,24 @@ import {UserReactionService}​​ from './userReactionService';
 export class CommentService extends BaseService {
 
 public static getComments(args: {postId: string}): Promise<any> {
-    return new Promise((resolve, reject) => {
-            const {postId} = args;
-            models.Comment.find({
-                postId: postId
-            }).then((comments: [ICommentModel]) => {
-                // check if there is any comment
-                // if there is then iterate through all comments and check if the user has liked it.
-                if (comments && comments.length > 0) {
-                    // let response = []; // comeup with schema of response also
-                     return resolve(Promise.all(comments.map((comment: ICommentModel) => {
-                        return UserReactionService​​.getUserReaction({
-                                'targetId': comment._id,
-                                'userId': "595656da98a0021cd9ee3f43" // hard-coded userId, TODO:
-                            }).then((userReaction: IUserReactionModel) => {
-                                return Object.assign({}, comment.toObject(), {"userReaction": userReaction.reaction});
-                            }).catch((err) => {
-                                console.log(err);
-                            });
-                    })));
-                } else {
-                    resolve([]); // no comment found
-                }
-            }).catch((error) => {
-                reject(error.message);
-            });
-        });
-    }
+    return models.Comment.find({
+        postId: args.postId
+    }).then((comments: [ICommentModel]) => {
+        if (comments && comments.length > 0) {
+            return Promise.all(comments.map((comment: ICommentModel) => {
+                return UserReactionService​​.getUserReaction({
+                    'targetId': comment._id,
+                    'userId': "595656da98a0021cd9ee3f43" // hard-coded userId, TODO:
+                }).then((userReaction: IUserReactionModel) => {
+                    const commentReaction = userReaction && userReaction.reaction ? userReaction.reaction : null;
+                    return Object.assign({}, comment.toObject(), {"userReaction": commentReaction});
+                }).catch((err) => {
+                    console.log(err);
+                });
+            }));
+        } else {
+            return []; // no comment found
+        }
+    });
+}
 }
