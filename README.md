@@ -1,5 +1,3 @@
-# Template for node-hapi-typescript-inversify projects
-
 ## Prerequisites
 ```
     Install `docker` and `docker-compose`
@@ -8,13 +6,18 @@
 ```
 docker-compose up
 ```
+## Production
+```
+https://lolmenow.herokuapp.com
+/ base url opens the swagger UI, test the apis over there.
+CI is enabled. Pushing to master leads to deployment
+```
 ## Debugging setup for vscode
 ```
 Run gulp from command line or from vscode by typing run task
 
 Then click DEBUG run on vscode 
 ```
-
 
 ## Debugging setup for Intellij idea/Webstorm
 1. Choose a port for debugging, say 56745. Expose this port in Dockerfile
