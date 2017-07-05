@@ -6,6 +6,7 @@ import {Schema} from 'mongoose';
 import {IUserReactionModel} from '../models/schemas/userReaction';
 import {ReactionType} from '../constants/enums/reactionType';
 import {TargetType} from '../constants/enums/targetType';
+import { IPostReactions } from "../interfaces/iPostReaction";
 
 export class UserReactionService extends BaseService {
     // needs to be paginated
@@ -19,6 +20,10 @@ export class UserReactionService extends BaseService {
                 } : { targetId}
                 return models.UserReaction.findOne(query).exec();
             }
+
+    public static getAggregatedUserReactionsForPostId: IPostReaction {
+
+    }
 
     public static insertReaction(args: {
         targetId: Schema.Types.ObjectId,
