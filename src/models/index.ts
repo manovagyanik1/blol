@@ -32,9 +32,8 @@ fs.readdirSync(__dirname)
             modelFiles = _.assign(modelFiles, require(path.join(__dirname, file)));
         }
     });
-
-// tslint:disable-next-line:max-line-length
-const dbUrl = "mongodb://" + config.get('database:mongodb:host') + ':' + config.get('database:mongodb:port') + '/' + config.get('database:mysql:db');
+// mongodb://heroku_437n9wks:8vjbq4q8jt25ntfpjvsd9q9a46@ds149412.mlab.com:49412/heroku_437n9wks
+const dbUrl = "mongodb://" + config.get('database:mongodb:host') + ':' + config.get('database:mongodb:port') + '/' + config.get('database:mongodb:db');
 
 mongoose.Promise = require('bluebird');
 const connection: mongoose.Connection = mongoose.createConnection(dbUrl);
