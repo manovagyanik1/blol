@@ -27,7 +27,7 @@ export class CommentService extends BaseService {
                         user
                     }).then((userReaction: IUserReactionModel) => {
                         const commentReaction = userReaction && userReaction.reaction ? userReaction.reaction : null;
-                        return Object.assign({}, comment.toObject(), {"userReaction": commentReaction});
+                        return Object.assign({}, comment.toObject(), {userReaction: commentReaction});
                     });
                 }));
             } else {
@@ -36,7 +36,6 @@ export class CommentService extends BaseService {
         });
     }
 
-// TODO: can we avoid retry comment schenario
     public static postComment(args: {postId: string, text: string, user: IUserModel}): Promise<any> {
         const {postId, text, user} = args;
         return new models.Comment({

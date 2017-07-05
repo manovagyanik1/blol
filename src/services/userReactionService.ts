@@ -21,25 +21,20 @@ export class UserReactionService extends BaseService {
                 return models.UserReaction.findOne(query).exec();
             }
 
-    public static getAggregatedUserReactionsForPostId(postIds: [Types.ObjectId]): Promise<any> {
-
-        return new Promise((resolve, reject) => {
-            models.UserReaction.aggregate([
+    public static getAggregatedUserReactionsForPostIds(postIds: Types.ObjectId[]): Promise<any> {
+            return models.UserReaction.aggregate([
                 {
                     $match: {
-                        postId: {$in: postIds}
+                        targetId: {$in: postIds}
                     }
                 },
                 {
                     $group: {
-                        _id: "reaction",
-                        count: {$sum: 1}
+                        _id: "targetId",
+
                     }
                 }
-            ], function (err, result) {
-                return result;
-            });
-        });
+            ]).exec();
     }
 
 //
