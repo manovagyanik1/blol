@@ -11,7 +11,7 @@
     "compile": "tsc --watch",
     "typescript-compile": "node_modules/typescript/bin/tsc --sourcemap",
     "dev": "PORT=3000 NODE_ENV='dev' npm i && tsc --watch --sourcemap && nodemon build/src/index.js",
-    "start": "NODE_ENV='prod' npm i && npm run gulp-prod && npm run typescript-compile && node build/src/index.js"
+    "start": "NODE_ENV='production' npm i && npm run gulp-prod && npm run typescript-compile && node build/src/index.js"
   },
   "author": "lolmenow",
   "license": "ISC",
