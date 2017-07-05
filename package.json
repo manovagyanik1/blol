@@ -6,11 +6,13 @@
   "scripts": {
     "grunt": "grunt",
     "test": "mocha build/src/test",
+    "gulp-prod": "gulp copy-configs",
     "migrate": "sequelize db:migrate",
     "compile": "tsc --watch",
-    "start": "PORT=3000 npm i && nodemon build/src/index.js & tsc --watch --sourcemap"
+    "dev": "PORT=3000 NODE_ENV='dev' npm i && nodemon build/src/index.js & tsc --watch --sourcemap",
+    "start": "NODE_ENV='prod' npm i && npm run gulp-prod && node build/src/index.js & tsc --sourcemap"
   },
-  "author": "markhanday",
+  "author": "lolmenow",
   "license": "ISC",
   "dependencies": {
     "@types/async": "^2.0.34",
@@ -66,7 +68,9 @@
     "sequelize": "^3.27.0",
     "sequelize-cli": "^2.4.0",
     "typescript": "^2.0.10",
-    "vision": "^4.1.0"
+    "vision": "^4.1.0",
+    "gulp": "^3.9.1",
+    "gulp-shell": "^0.6.3"
   },
   "devDependencies": {
     "@types/chai": "^4.0.1",
@@ -75,8 +79,6 @@
     "@types/mongoose": "^4.7.18",
     "chai": "^4.0.2",
     "del": "^3.0.0",
-    "gulp": "^3.9.1",
-    "gulp-shell": "^0.6.3",
     "gulp-ts": "^0.3.0",
     "gulp-typescript": "^3.1.7",
     "merge2": "^1.0.3",

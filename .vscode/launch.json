@@ -11,14 +11,11 @@
             "name": "nodemon",
             "runtimeExecutable": "${workspaceRoot}/node_modules/nodemon/bin/nodemon.js",
             "runtimeArgs": [
-<<<<<<< HEAD
-                "--inspect=5858"
-=======
                 "--inspect=5959"
->>>>>>> ft-ranji
             ],
             "env": {
-                "PORT": "3000"
+                "PORT": "3000",
+                "NODE_ENV": "env"
             },
             "program": "${workspaceRoot}/build/src/index.js",
             "outFiles": [
@@ -29,21 +26,6 @@
             "port": 5959,
             "console": "integratedTerminal",
             "internalConsoleOptions": "neverOpen"
-        },
-        {
-            "type": "node",
-            "request": "launch",
-            "name": "Launch Program",
-            "program": "${workspaceRoot}/src/index.js",
-            "outFiles": []
-        },
-        {
-            "type": "node",
-            "request": "attach",
-            "name": "Attach to Process",
-            "address": "localhost",
-            "port": 5858,
-            "outFiles": []
         }
     ]
 }
