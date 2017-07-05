@@ -2,14 +2,14 @@ import { ActionType } from '../constants/enums/actionType';
 import { IUserModel } from './../models/schemas/user';
 import BaseService from "./baseService";
 import { models } from '../models';
-import {Schema} from 'mongoose';
+import {Schema, Types} from 'mongoose';
 import {IUserReactionModel} from '../models/schemas/userReaction';
 import {ReactionType} from '../constants/enums/reactionType';
 import {TargetType} from '../constants/enums/targetType';
-import { IPostReactions } from "../interfaces/iPostReaction";
+import { IPostReaction } from "../interfaces/iPostReaction";
 
 export class UserReactionService extends BaseService {
-    // needs to be paginated
+
     public static getUserReaction( args: {
             targetId: Schema.Types.ObjectId,
             user: IUserModel }) : Promise<any> {
@@ -21,9 +21,47 @@ export class UserReactionService extends BaseService {
                 return models.UserReaction.findOne(query).exec();
             }
 
-    public static getAggregatedUserReactionsForPostId: IPostReaction {
+    public static getAggregatedUserReactionsForPostId(postIds: [Types.ObjectId]): Promise<any> {
 
+        return new Promise((resolve, reject) => {
+            models.UserReaction.aggregate([
+                {
+                    $match: {
+                        postId: {$in: postIds}
+                    }
+                },
+                {
+                    $group: {
+                        _id: "reaction",
+                        count: {$sum: 1}
+                    }
+                }
+            ], function (err, result) {
+                return result;
+            });
+        });
     }
+
+//
+//     var getBalance = function(accountId) {
+//     AccountModel.aggregate([
+//         { $match: {
+//             _id: accountId
+//         }},
+//         { $unwind: "$records" },
+//         { $group: {
+//             _id: "$_id",
+//             balance: { $sum: "$records.amount"  }
+//         }}
+//     ], function (err, result) {
+//         if (err) {
+//             console.log(err);
+//             return;
+//         }
+//         console.log(result);
+//     });
+// }
+
 
     public static insertReaction(args: {
         targetId: Schema.Types.ObjectId,
