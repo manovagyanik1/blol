@@ -10,7 +10,7 @@
     "migrate": "sequelize db:migrate",
     "compile": "tsc --watch",
     "dev": "PORT=3000 NODE_ENV='dev' npm i && nodemon build/src/index.js & tsc --watch --sourcemap",
-    "start": "NODE_ENV='prod' npm i && npm run gulp-prod && node build/src/index.js & tsc --sourcemap"
+    "start": "NODE_ENV='prod' npm i && npm run gulp-prod && node build/src/index.js && tsc --sourcemap"
   },
   "author": "lolmenow",
   "license": "ISC",
