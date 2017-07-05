@@ -9,8 +9,8 @@
     "gulp-prod": "node_modules/gulp/bin/gulp.js copy-configs",
     "migrate": "sequelize db:migrate",
     "compile": "tsc --watch",
-    "dev": "PORT=3000 NODE_ENV='dev' npm i && nodemon build/src/index.js & tsc --watch --sourcemap",
-    "start": "NODE_ENV='prod' npm i && npm run gulp-prod && node build/src/index.js && tsc --sourcemap"
+    "dev": "PORT=3000 NODE_ENV='dev' npm i && tsc --watch --sourcemap && nodemon build/src/index.js",
+    "start": "NODE_ENV='prod' npm i && npm run gulp-prod && tsc --sourcemap && node build/src/index.js"
   },
   "author": "lolmenow",
   "license": "ISC",
