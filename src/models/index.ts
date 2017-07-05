@@ -13,7 +13,7 @@ import {IUserReactionModel, UserReactionSchema} from "./schemas/userReaction";
 import {IPost} from "./interfaces/post";
 import {IUser} from "./interfaces/user";
 import {IComment} from "./interfaces/comment";
-import {IUserReaction} from "./interfaces/UserReaction";
+import {IUserReaction} from "./interfaces/userReaction";
 
 import {IServerConfig} from "../../configurations/interfaces";
 const config = container.get<IServerConfig>("IServerConfig");
