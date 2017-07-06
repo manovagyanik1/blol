@@ -3,8 +3,7 @@ import BaseService from "./baseService";
 import {UserReactionService} from './userReactionService';
 import { models } from '../models';
 import { IPostModel } from "../models/schemas/post";
-import { IUserReactionModel } from "../models/schemas/userReaction";
-import { ICommentModel } from "../models/schemas/comment";
+import {AMUserReactionValue, PostUserReaction} from "../apiinterfaces/AMUserReactionValue";
 import {BeforeAfter} from "../constants/enums/beforeAfter";
 import {Types} from "mongoose";
 
@@ -24,7 +23,9 @@ export class FeedService extends BaseService {
                 return UserReactionService.getAggregatedUserReactionsForPostIds(postIds)
                     .then(postReactions =>
                         posts.map((post: IPostModel) =>
-                            Object.assign({}, post.toObject(), {userReaction: postReactions[post._id]})
+                            Object.assign({},
+                                post.toObject(),
+                                {userReaction: postReactions[post._id] ? postReactions[post._id] : PostUserReaction(0, 0, 0, 0)})
                         ));
             });
     }
