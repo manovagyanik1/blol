@@ -6,5 +6,7 @@ data
 !/src/migrations/**/*.js
 pdfs/*
 .DS_Store
+.vscode/
 *.log
 *.iml
+*.orig
