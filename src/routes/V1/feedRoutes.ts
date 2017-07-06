@@ -14,7 +14,7 @@ export = [
                   query: {
                     beforeTimeStamp: Joi.date().timestamp(),
                     afterTimeStamp: Joi.date().timestamp(),
-                    pageSize: Joi.number()
+                    pageSize: Joi.number().default(10),
                 }
             },
             plugins: {

@@ -11,7 +11,10 @@ console.log(`Running enviroment ${process.env.NODE_ENV || "dev"}`);
 
 //Starting Application Server
 Server.start(() => {
+<<<<<<< HEAD
 
+=======
+>>>>>>> ft-ranji
     if (config.get('cron:startCron')) {
         new Crons();
     }
