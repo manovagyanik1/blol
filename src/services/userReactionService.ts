@@ -22,7 +22,7 @@ export class UserReactionService extends BaseService {
             }
 
     public static getAggregatedUserReactionsForPostIds(postIds: Types.ObjectId[]): Promise<any> {
-            return models.UserReaction.aggregate([
+        return models.UserReaction.aggregate([
                 {
                     $match: {
                         targetId: {$in: postIds}
@@ -30,33 +30,53 @@ export class UserReactionService extends BaseService {
                 },
                 {
                     $group: {
-                        _id: "targetId",
-
+                        _id: {
+                            targetId: "$targetId",
+                            "reaction": "$reaction",
+                        },
+                        "reactionCount" : { $sum: 1 },
+                        "targetId": {$first: "$targetId" },
+                        "reaction": {$first: "$reaction" },
                     }
-                }
-            ]).exec();
+                },
+                {
+                    $group: {
+                        _id: {
+                            "targetId": "$targetId",
+                        },
+                        "postId": {$first: "$targetId"},
+                        "LOL": {
+                                $sum: {
+                                    $cond : { if: { $eq: [ '$reaction', 'LOL' ] }, then: '$reactionCount', else: 0 }
+                                }
+                        },
+                        "HAHA": {
+                            $sum: {
+                                $cond : { if: { $eq: [ '$reaction', 'HAHA' ] }, then: '$reactionCount', else: 0 }
+                            }
+                        },
+                        "CLAP": {
+                            $sum: {
+                                $cond : { if: { $eq: [ '$reaction', 'CLAP' ] }, then: '$reactionCount', else: 0 }
+                            }
+                        },
+                        "WOW": {
+                            $sum: {
+                                $cond : { if: { $eq: [ '$reaction', 'WOW' ] }, then: '$reactionCount', else: 0 }
+                            }
+                        }
+                    }
+                },
+            ])
+            .exec()
+            .then((userReactions: Object[] ) =>
+                userReactions.reduce((pre, userReaction:IPostReaction) => {
+                    const {CLAP, WOW, HAHA, LOL} = userReaction;
+                    pre[userReaction['postId']] = {CLAP, WOW, HAHA, LOL};
+                    return pre;
+                }, {})
+            );
     }
-
-//
-//     var getBalance = function(accountId) {
-//     AccountModel.aggregate([
-//         { $match: {
-//             _id: accountId
-//         }},
-//         { $unwind: "$records" },
-//         { $group: {
-//             _id: "$_id",
-//             balance: { $sum: "$records.amount"  }
-//         }}
-//     ], function (err, result) {
-//         if (err) {
-//             console.log(err);
-//             return;
-//         }
-//         console.log(result);
-//     });
-// }
-
 
     public static insertReaction(args: {
         targetId: Schema.Types.ObjectId,
