@@ -6,6 +6,7 @@ import { IPostModel } from "../models/schemas/post";
 import {AMUserReactionValue, PostUserReaction} from "../apiinterfaces/AMUserReactionValue";
 import {BeforeAfter} from "../constants/enums/beforeAfter";
 import {Types} from "mongoose";
+import {UserReaction} from "../models/schemas/userReaction";
 
 export class FeedService extends BaseService {
 
@@ -20,14 +21,19 @@ export class FeedService extends BaseService {
             .sort({'createdAt': -1})
             .then((posts: [IPostModel]) => {
                 const postIds: Types.ObjectId[] = posts.map((post: IPostModel) => post._id);
-                return UserReactionService.getAggregatedUserReactionsForPostIds(postIds)
+                const currentUserReactions = UserReactionService.getThisUserReactionForTargetIds(postIds, user);
+                return UserReactionService.getAggregatedUserReactionsForTargetIds(postIds)
                     .then(postReactions =>
                         posts.map((post: IPostModel) =>
                             Object.assign({},
                                 post.toObject(),
-                                {userReaction: postReactions[post._id] ? postReactions[post._id] : PostUserReaction(0, 0, 0, 0)})
-                        ));
-            });
+                                {userReaction: postReactions[post._id] ? postReactions[post._id] : PostUserReaction(0, 0, 0, 0, 0)},
+                                {currentUserReaction: currentUserReactions[post._id] ? currentUserReactions[post._id] : null}
+                            )
+                        ))
+                    .then();
+            })
+            .then();
     }
 }
 

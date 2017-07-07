@@ -7,6 +7,7 @@ import {IUserReactionModel} from '../models/schemas/userReaction';
 import {ReactionType} from '../constants/enums/reactionType';
 import {TargetType} from '../constants/enums/targetType';
 import { IPostReaction } from "../interfaces/iPostReaction";
+import {IUser} from "../models/interfaces/user";
 
 export class UserReactionService extends BaseService {
 
@@ -21,11 +22,27 @@ export class UserReactionService extends BaseService {
                 return models.UserReaction.findOne(query).exec();
             }
 
-    public static getAggregatedUserReactionsForPostIds(postIds: Types.ObjectId[]): Promise<any> {
+    public static getThisUserReactionForTargetIds(targetIds: Types.ObjectId[], user:IUserModel): Promise<any> {
+        return models.UserReaction.aggregate([
+            {
+                $match: {
+                    targetId: {$in: targetIds},
+                    userId: user._id
+                }
+            },
+        ]).exec()
+            .then((userReactions: Object[]) => {
+                return userReactions.reduce((pre, userReaction: IUserReactionModel) => {
+                    return pre[userReaction['targetId']] = userReaction;
+                }, {});
+            });
+    }
+
+    public static getAggregatedUserReactionsForTargetIds(targetIds: Types.ObjectId[]): Promise<any> {
         return models.UserReaction.aggregate([
                 {
                     $match: {
-                        targetId: {$in: postIds}
+                        targetId: {$in: targetIds}
                     }
                 },
                 {
@@ -44,7 +61,7 @@ export class UserReactionService extends BaseService {
                         _id: {
                             "targetId": "$targetId",
                         },
-                        "postId": {$first: "$targetId"},
+                        "targetId": {$first: "$targetId"},
                         "LOL": {
                                 $sum: {
                                     $cond : { if: { $eq: [ '$reaction', 'LOL' ] }, then: '$reactionCount', else: 0 }
@@ -64,6 +81,11 @@ export class UserReactionService extends BaseService {
                             $sum: {
                                 $cond : { if: { $eq: [ '$reaction', 'WOW' ] }, then: '$reactionCount', else: 0 }
                             }
+                        },
+                        "LIKE": {
+                            $sum: {
+                                $cond : { if: { $eq: [ '$reaction', 'LIKE' ] }, then: '$reactionCount', else: 0 }
+                            }
                         }
                     }
                 },
@@ -72,7 +94,7 @@ export class UserReactionService extends BaseService {
             .then((userReactions: Object[] ) =>
                 userReactions.reduce((pre, userReaction:IPostReaction) => {
                     const {CLAP, WOW, HAHA, LOL} = userReaction;
-                    pre[userReaction['postId']] = {CLAP, WOW, HAHA, LOL};
+                    pre[userReaction['targetId']] = {CLAP, WOW, HAHA, LOL};
                     return pre;
                 }, {})
             );
