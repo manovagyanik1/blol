@@ -23,7 +23,8 @@ export class UserReactionService extends BaseService {
             }
 
     public static getThisUserReactionForTargetIds(targetIds: Types.ObjectId[], user:IUserModel): Promise<any> {
-        return models.UserReaction.aggregate([
+        return user ?
+        models.UserReaction.aggregate([
             {
                 $match: {
                     targetId: {$in: targetIds},
@@ -35,7 +36,7 @@ export class UserReactionService extends BaseService {
                 return userReactions.reduce((pre, userReaction: IUserReactionModel) => {
                     return pre[userReaction['targetId']] = userReaction;
                 }, {});
-            });
+            }) : {};
     }
 
     public static getAggregatedUserReactionsForTargetIds(targetIds: Types.ObjectId[]): Promise<any> {

@@ -30,10 +30,8 @@ export class FeedService extends BaseService {
                                 {userReaction: postReactions[post._id] ? postReactions[post._id] : PostUserReaction(0, 0, 0, 0, 0)},
                                 {currentUserReaction: currentUserReactions[post._id] ? currentUserReactions[post._id] : null}
                             )
-                        ))
-                    .then();
-            })
-            .then();
+                        ));
+            });
     }
 }
 
