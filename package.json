@@ -6,7 +6,7 @@
   "scripts": {
     "grunt": "grunt",
     "test": "mocha build/src/test",
-    "gulp-prod": "node_modules/gulp/bin/gulp.js copy-configs",
+    "gulp-prod": "node_modules/gulp/bin/gulp.js run-prod",
     "migrate": "sequelize db:migrate",
     "compile": "tsc --watch",
     "typescript-compile": "node_modules/typescript/bin/tsc --sourcemap",

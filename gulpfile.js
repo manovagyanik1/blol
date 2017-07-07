@@ -23,6 +23,8 @@ gulp.task('build', function(callback){
 
 gulp.task('copy-build', ['copy-configs', 'typescript']);
 
+gulp.task('run-prod', ['copy-configs', 'create-db-from-dump']);
+
 gulp.task('copy-configs', function(){
     return gulp.src('./configurations/*.json')
     .pipe(gulp.dest('./build/configurations/'));
