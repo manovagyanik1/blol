@@ -1,7 +1,7 @@
 import { IUserModel } from '../models/schemas/user';
 import * as Hapi from 'hapi';
 import BaseApi from "./baseApi";
-import {PostService} from "../services/PostService";
+import {PostService} from "../services/postService";
 
 export class PostApi extends BaseApi {
 
