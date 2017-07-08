@@ -1,12 +1,13 @@
-import {Types} from "mongoose";
 import {AMUserReactionValue} from "./AMUserReactionValue";
-import {IUser} from "../models/interfaces/user";
 import {ReactionType} from "../constants/enums/reactionType";
+import {Schema, Types} from "mongoose";
 
 export interface AMComment {
     _id: Types.ObjectId;
+    createdAt: Schema.Types.Date;
     text: string;
-    user: IUser;
+    userId: string;
+    displayName: string;
     reaction: AMUserReactionValue;
     currentUserReaction?: ReactionType;
 }

@@ -7,10 +7,11 @@ import {AMUserReactionValue, PostUserReaction} from "../apiinterfaces/AMUserReac
 import {BeforeAfter} from "../constants/enums/beforeAfter";
 import {Types} from "mongoose";
 import {UserReaction} from "../models/schemas/userReaction";
+import {AMPost} from "../apiinterfaces/AMPost";
 
 export class FeedService extends BaseService {
 
-    public static getFeed(args: { timestamp: number, type: BeforeAfter, pageSize: number, user: IUserModel }): Promise<any> {
+    public static getFeed(args: { timestamp: number, type: BeforeAfter, pageSize: number, user: IUserModel }): Promise<AMPost[]> {
         const {timestamp, type, pageSize, user} = args;
         const query = type === BeforeAfter.BEFORE ? {$lt: timestamp} : {$gt: timestamp};
 
@@ -29,7 +30,7 @@ export class FeedService extends BaseService {
                                 post.toObject(),
                                 {userReaction: postReactions[post._id] ? postReactions[post._id] : PostUserReaction(0, 0, 0, 0, 0)},
                                 {currentUserReaction: currentUserReactions[post._id] ? currentUserReactions[post._id] : null}
-                            )
+                            ) as AMPost
                         ));
             });
     }
