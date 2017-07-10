@@ -2,6 +2,8 @@ import BaseService from "./baseService";
 import { models } from '../models';
 import container from "../libs/ioc";
 import { IServerConfig } from "../../configurations/interfaces";
+import {Types} from "mongoose";
+import {IUserModel} from "../models/schemas/user";
 
 const FB = require("fb");
 const config = container.get<IServerConfig>("IServerConfig");
@@ -26,6 +28,7 @@ export class UserService extends BaseService {
         var expires = res.expires ? res.expires : 0;
         FB.options({accessToken});
 
+
         FB.api('/me', function (res) {
             if (res && res.error) {
                 if (res.error.code === 'ETIMEDOUT') {
@@ -40,4 +43,11 @@ export class UserService extends BaseService {
     });
     }
 
+    public static getForIds(userIds: Types.ObjectId[]): Promise<IUserModel[]> {
+       return models.User.aggregate([{
+            $match: {
+                _id: {$in: userIds}
+            }
+        }]).exec();
+        }
 }

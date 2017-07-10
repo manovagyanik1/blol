@@ -7,7 +7,7 @@ export interface AMUserReactionValue {
 }
 
 
-export function PostUserReaction(LOL: number, HAHA: number, CLAP: number, WOW: number, LIKE: number): AMUserReactionValue {
+export function UserReactionConstructor(LOL: number, HAHA: number, CLAP: number, WOW: number, LIKE: number): AMUserReactionValue {
     return {
         LOL,
         HAHA,

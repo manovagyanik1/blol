@@ -33,8 +33,8 @@ export class UserReactionService extends BaseService {
             },
         ]).exec()
             .then((userReactions: Object[]) => {
-                return userReactions.reduce((pre, userReaction: IUserReactionModel) => {
-                    return pre[userReaction['targetId']] = userReaction;
+                return userReactions.reduce((targetIdToUserReaction, userReaction: IUserReactionModel) => {
+                    return targetIdToUserReaction[userReaction['targetId']] = userReaction;
                 }, {});
             }) : {};
     }

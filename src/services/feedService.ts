@@ -1,12 +1,11 @@
-import {IUserModel, User} from '../models/schemas/user';
+import {IUserModel} from '../models/schemas/user';
 import BaseService from "./baseService";
 import {UserReactionService} from './userReactionService';
 import { models } from '../models';
 import { IPostModel } from "../models/schemas/post";
-import {AMUserReactionValue, PostUserReaction} from "../apiinterfaces/AMUserReactionValue";
+import {UserReactionConstructor} from "../apiinterfaces/AMUserReactionValue";
 import {BeforeAfter} from "../constants/enums/beforeAfter";
 import {Types} from "mongoose";
-import {UserReaction} from "../models/schemas/userReaction";
 import {AMPost} from "../apiinterfaces/AMPost";
 
 export class FeedService extends BaseService {
@@ -28,7 +27,7 @@ export class FeedService extends BaseService {
                         posts.map((post: IPostModel) =>
                             Object.assign({},
                                 post.toObject(),
-                                {userReaction: postReactions[post._id] ? postReactions[post._id] : PostUserReaction(0, 0, 0, 0, 0)},
+                                {userReaction: postReactions[post._id] ? postReactions[post._id] : UserReactionConstructor(0, 0, 0, 0, 0)},
                                 {currentUserReaction: currentUserReactions[post._id] ? currentUserReactions[post._id] : null}
                             ) as AMPost
                         ));

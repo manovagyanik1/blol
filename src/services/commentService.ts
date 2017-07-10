@@ -1,13 +1,12 @@
-import { Comment } from './../models/schemas/comment';
 import { BeforeAfter } from '../constants/enums/beforeAfter';
 import { IUserModel } from '../models/schemas/user';
 import BaseService from "./baseService";
 import { models } from '../models';
 import {ICommentModel} from '../models/schemas/comment';
-import {IUserReactionModel} from '../models/schemas/userReaction';
-import {Schema} from 'mongoose';
 import {UserReactionService} from './userReactionService';
 import {AMComment} from "../apiinterfaces/AMComment";
+import {UserService} from "./userService";
+import {UserReactionConstructor} from "../apiinterfaces/AMUserReactionValue";
 
 export class CommentService extends BaseService {
 
@@ -22,20 +21,36 @@ export class CommentService extends BaseService {
         .sort({'createdAt': -1}) // descending sorting
         .then((comments: [ICommentModel]) => {
             if (comments && comments.length > 0) {
-                return Promise.all(comments.map((comment: ICommentModel) => {
-                    return UserReactionService.getUserReaction({
-                        targetId: comment._id,
-                        user
-                    }).then((userReaction: IUserReactionModel) => {
-                        const commentReaction = userReaction && userReaction.reaction ? userReaction.reaction : null;
-                        return Object.assign(
-                            {},
-                            comment.toObject(),
-                            {currentUserReaction: commentReaction}) as AMComment;
-                    });
-                }));
+                const userIds = comments.map(comment => comment.userId);
+                const commentIds = comments.map(comment => comment._id);
+                const commentIdToThisUserReaction = UserReactionService.getThisUserReactionForTargetIds(commentIds, user);
+                const commentIdToUserReactions = UserReactionService.getAggregatedUserReactionsForTargetIds(commentIds);
+                const userIdToUserInfo = UserService.getForIds(userIds).then(
+                    (userInfo: IUserModel[]) => {
+                        return userInfo.reduce(
+                            (pre, cur:IUserModel) => {
+                                pre[cur._id] = cur;
+                                return pre;
+                                }, {});
+                    }
+                );
+                return Promise.all([commentIdToThisUserReaction, userIdToUserInfo, commentIdToUserReactions]).then(
+                    values => {
+                        const tCommentIdToThisUserReaction = values[0];
+                        const tUserIdToUserInfo = values[1];
+                        const tCommentIdToUserReactions = values[2];
+                        return comments.map((comment:ICommentModel) => {
+                            return Object.assign({}, comment.toObject(),
+                                user ? {currentUserReaction: tCommentIdToThisUserReaction[user._id]} : {},
+                                {userDetails: tUserIdToUserInfo[comment.userId]},
+                                {reaction: tCommentIdToUserReactions[comment._id] ?  tCommentIdToUserReactions[comment._id] : UserReactionConstructor(0, 0, 0, 0, 0)}) as AMComment;
+                        });
+
+
+                    }
+                );
             } else {
-                return []; // no comment found
+                return [];
             }
         });
     }
