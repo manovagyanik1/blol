@@ -11,5 +11,6 @@ export var CommentSchema: Schema = new Schema({
   postId: Schema.Types.ObjectId,
 }, { timestamps: true });
 
+CommentSchema.index({postId:1, createdAt:1});
 
 export const Comment: Model<ICommentModel> = model<ICommentModel>("Comment", CommentSchema);

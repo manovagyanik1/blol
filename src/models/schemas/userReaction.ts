@@ -10,6 +10,9 @@ export var UserReactionSchema: Schema = new Schema({
   reaction: String,
   type: String,
 }, { timestamps: true });
+UserReactionSchema.index({targetId:1, reaction:1});
+UserReactionSchema.index({targetId:1, UserId:1});
+
 
 
 export const UserReaction: Model<IUserReactionModel> = model<IUserReactionModel>("UserReaction", UserReactionSchema);
