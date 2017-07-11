@@ -7,9 +7,9 @@ export class UserReactionApi extends BaseApi {
 
     public static deleteReaction(request: Hapi.Request, reply: Hapi.IReply) {
         const user: IUserModel = request.auth.credentials;
-        const {targetId, reaction, type} = request.payload;
+        const {targetId} = request.payload;
 
-        return reply(UserReactionService.deleteReaction({targetId, userId: user._id, reaction, type}));
+        return reply(UserReactionService.deleteReaction({targetId, userId: user._id}));
     }
 
     public static insertReaction(request: Hapi.Request, reply: Hapi.IReply) {

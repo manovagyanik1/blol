@@ -109,27 +109,28 @@ export class UserReactionService extends BaseService {
             Promise<any> {
 
         const {targetId, userId, reaction, type} = args;
-        return new models.UserReaction({
-            targetId,
-            userId,
-            reaction,
-            type
-        }).save();
+        return Promise.all([UserReactionService.deleteReaction(args)])
+            .then(
+                () => {
+                    return new models.UserReaction({
+                        targetId,
+                        userId,
+                        reaction,
+                        type
+                    }).save();
+                }
+            );
     }
 
     public static deleteReaction(args: {
         targetId: Schema.Types.ObjectId,
-        userId: Schema.Types.ObjectId,
-        reaction: ReactionType,
-        type: TargetType}):
+        userId: Schema.Types.ObjectId}):
             Promise<any> {
 
-        const {targetId, userId, reaction, type} = args;
+        const {targetId, userId} = args;
         return models.UserReaction.findOne({
             targetId,
-            userId,
-            reaction,
-            type
+            userId
         })
         .remove()
         .exec();

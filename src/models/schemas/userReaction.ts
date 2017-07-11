@@ -11,7 +11,7 @@ export var UserReactionSchema: Schema = new Schema({
   type: String,
 }, { timestamps: true });
 UserReactionSchema.index({targetId:1, reaction:1});
-UserReactionSchema.index({targetId:1, UserId:1});
+UserReactionSchema.index({targetId:1, UserId:1}, {unique:true});
 
 
 
