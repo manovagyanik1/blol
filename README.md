@@ -1,10 +1,7 @@
 ## Prerequisites
+
 ```
-    Install `docker` and `docker-compose`
-```
-## Installation
-```
-docker-compose up
+ make sure to start phantomJS web driver by running npm run phantomjs
 ```
 ## Production
 ```
