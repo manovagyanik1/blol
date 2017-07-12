@@ -4,6 +4,7 @@ import * as Hapi from 'hapi';
 import BaseApi from "./baseApi";
 import {FeedService} from "../services/feedService";
 import {BeforeAfter} from "../constants/enums/beforeAfter";
+import {FbPostPullerService} from "../services/fbPostPullerService";
 
 export class FeedApi extends BaseApi {
 

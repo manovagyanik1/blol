@@ -15,17 +15,15 @@
     "clientToken": "14105b034fc43eb444d755ec5d57dfd7"
   },
 
-  "fbPostPuller": {
-    "pages": [
+  "fbPostPuller": [
       {
-        "id": 1515871602074952,
+        "pageId": 1515871602074952,
         "cronString": "",
         "postDelayInMinutes": 300,
         "commentCount": 10
       }
 
-    ]
-  },
+  ],
   "auth": {
     "enabled": true
   },
