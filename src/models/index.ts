@@ -16,6 +16,8 @@ import {IComment} from "./interfaces/comment";
 import {IUserReaction} from "./interfaces/userReaction";
 
 import {IServerConfig} from "../../configurations/interfaces";
+import {FbPostPullerData, FbPostPullerSchema, IFbPostPullerDataModel} from "./schemas/fbPostPullerData";
+import {IFbPostPullerData} from "./interfaces/iFbPostPullerData";
 const config = container.get<IServerConfig>("IServerConfig");
 
 let modelFiles = {};
@@ -43,6 +45,7 @@ interface IModel {
     Post: Model<IPostModel>;
     Comment: Model<ICommentModel>;
     UserReaction: Model<IUserReactionModel>;
+    FbPostPullerData: Model<IFbPostPullerDataModel>;
 };
 
 //create models
@@ -50,5 +53,6 @@ export const models: IModel = {
     User: connection.model<IUserModel>("User", UserSchema),
     Post: connection.model<IPostModel>("Post", PostSchema),
     Comment: connection.model<ICommentModel>("Comment", CommentSchema),
-    UserReaction: connection.model<IUserReactionModel>("UserReaction", UserReactionSchema)
+    UserReaction: connection.model<IUserReactionModel>("UserReaction", UserReactionSchema),
+    FbPostPullerData: connection.model<IFbPostPullerDataModel>("FbPostPullerData", FbPostPullerSchema)
 };

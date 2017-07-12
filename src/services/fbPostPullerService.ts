@@ -4,6 +4,10 @@ import {IServerConfig} from "../../configurations/interfaces";
 import {IFbPage} from "../interfaces/iFbPage";
 import FBUtils from "../utils/fbUtils";
 import {IFbData} from "../interfaces/iFbData";
+import {IFbPost} from "../models/interfaces/iFbPost";
+import {FbPostStatus} from "../constants/enums/fbPostStatus";
+import {IFbPostPullerData} from "../models/interfaces/iFbPostPullerData";
+import {models} from "../models/index";
 
 const format = require('string-format');
 const fetch = require('node-fetch');
@@ -36,11 +40,22 @@ export class FbPostPullerService extends BaseService {
                     })
                     .then(postResults => {
                         // List of objects {id, likes, comments ... }
-
+                        FbPostPullerService.saveFbPost(postResults);
                     });
             });
         });
 
+    }
+
+    public static saveFbPost(posts: IFbPost[]) {
+        posts.map(post => {
+            return new models.FbPostPullerData({
+                postId: post.postId,
+                jsonData: JSON.stringify(post),
+                postCreationTime: post.postCreationTime,
+                status: FbPostStatus.PENDING
+            } as IFbPostPullerData).save();
+        });
     }
 
     public static getFbPostResults({postObject, accessToken}) {
