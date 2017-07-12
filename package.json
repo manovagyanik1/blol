@@ -84,7 +84,10 @@
     "mocha": "^3.4.2",
     "nodemon": "^1.11.0",
     "run-sequence": "^2.0.0",
-    "tslint": "^4.0.1"
+    "tslint": "^4.0.1",
+    "phantomjs": "^2.1.7",
+    "selenium-node-webdriver": "^0.1.2",
+    "selenium-webdriver": "^3.4.0"
   },
   "devDependencies": {
   }
