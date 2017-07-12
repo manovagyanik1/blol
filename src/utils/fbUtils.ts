@@ -1,7 +1,7 @@
 const webdriver = require('selenium-node-webdriver');
 
 export default class FBUtils {
-    public static getAccessToken() {
+    public static getAccessToken(): Promise<string> {
         const url = 'https://developers.facebook.com/tools/explorer/145634995501895?method=GET&path=1515871602074952%2Ffeed&version=v2.9';
         return webdriver()
         .then(function (driver) {

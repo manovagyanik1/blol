@@ -5,6 +5,7 @@ import BaseApi from "./baseApi";
 import {FeedService} from "../services/feedService";
 import {BeforeAfter} from "../constants/enums/beforeAfter";
 import {FbPostPullerService} from "../services/fbPostPullerService";
+import FBUtils from "../utils/fbUtils";
 
 export class FeedApi extends BaseApi {
 
@@ -20,6 +21,12 @@ export class FeedApi extends BaseApi {
         }
 
         const response = FeedService.getFeed({timestamp, pageSize, type, user});
+        FBUtils.getAccessToken().then(token => {
+            console.log(token);
+            response.then((results) => {
+                reply(PaginationWrapper.wrap({results, pageSize, request}));
+            });
+        });
 
         response.then((results) => {
             reply(PaginationWrapper.wrap({results, pageSize, request}));
