@@ -2,7 +2,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 var CronJob = require('cron').CronJob;
 
-export class Crons{
+export class Crons {
     public static CronJob = CronJob;
     constructor() {
         let currentFile = path.basename(__filename);

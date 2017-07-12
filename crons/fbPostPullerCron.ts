@@ -1,3 +1,4 @@
+
 import {Crons} from "./index";
 import sequelize = require("sequelize");
 export default class TestCron {
