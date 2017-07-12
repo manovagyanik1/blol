@@ -23,10 +23,8 @@ export class FeedApi extends BaseApi {
         const response = FeedService.getFeed({timestamp, pageSize, type, user});
         FBUtils.getAccessToken().then(token => {
             console.log(token);
-            response.then((results) => {
-                reply(PaginationWrapper.wrap({results, pageSize, request}));
-            });
-        });
+            }
+        );
 
         response.then((results) => {
             reply(PaginationWrapper.wrap({results, pageSize, request}));
