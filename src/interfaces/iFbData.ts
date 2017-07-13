@@ -1,3 +1,3 @@
 export interface IFbData {
-    data: any,
+    data: any;
 }

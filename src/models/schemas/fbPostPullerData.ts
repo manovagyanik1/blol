@@ -11,6 +11,7 @@ export var FbPostPullerSchema: Schema = new Schema({
     status: String,
 }, { timestamps: true });
 
-FbPostPullerSchema.index({postId:1, createdAt:1});
+FbPostPullerSchema.index({postId:1}, {unique: true});
+FbPostPullerSchema.index({createdAt:1});
 
 export const FbPostPullerData: Model<IFbPostPullerDataModel> = model<IFbPostPullerDataModel>("FbPostPullerData", FbPostPullerSchema);

@@ -8,13 +8,13 @@ import {IFbPost} from "../models/interfaces/iFbPost";
 import {FbPostStatus} from "../constants/enums/fbPostStatus";
 import {IFbPostPullerData} from "../models/interfaces/iFbPostPullerData";
 import {models} from "../models/index";
+import {fn} from "sequelize";
 
 const format = require('string-format');
 const fetch = require('node-fetch');
 
 
 const config = container.get<IServerConfig>("IServerConfig");
-const FB = require('fb');
 const URL_FOR_FETCHING_POSTS:string = 'https://graph.facebook.com/v2.9/{0}/posts?access_token={1}&limit=100';
 const URL_FOR_FETCHING_LIKES:string = 'https://graph.facebook.com/v2.9/{0}/likes?summary=true&access_token={1}&limit=100';
 const URL_FOR_FETCHING_ATTACHMENTS:string = 'https://graph.facebook.com/v2.9/{0}/attachments?summary=true&access_token={1}&limit=100';
@@ -36,14 +36,30 @@ export class FbPostPullerService extends BaseService {
                     })
                     .then((result: IFbData) => {
                         const {data} = result;
-                        return Promise.all(data.map(postObject => FbPostPullerService.getFbPostResults({postObject, accessToken})));
+                        return data.filter(FbPostPullerService.filterVeryRecentPosts(page.postDelayInMinutes));
+                    })
+                    .then((result: IFbData) => {
+                        const {data} = result;
+                        return Promise.all(data.map((singlePostObject) => {
+                            return FbPostPullerService.getFbPostResults({singlePostObject, accessToken});
+                        }));
                     })
                     .then(postResults => {
                         // List of objects {id, likes, comments ... }
-                        FbPostPullerService.saveFbPost(postResults);
+                        return FbPostPullerService.saveFbPost(postResults);
                     });
             });
         });
+
+    }
+
+    public static filterVeryRecentPosts(thresholdDelayInMinutes: number): (IFbPostItem) => boolean {
+        return (fbPost) => {
+            const curDate = new Date();
+            const differenceInMinutes = (curDate.getTime() - new Date(fbPost.created_time).getTime()) / (1000 * 60);
+
+            return differenceInMinutes > thresholdDelayInMinutes ? true : false;
+        };
 
     }
 
@@ -58,8 +74,8 @@ export class FbPostPullerService extends BaseService {
         });
     }
 
-    public static getFbPostResults({postObject, accessToken}) {
-        const {created_time, id} = postObject;
+    public static getFbPostResults({singlePostObject, accessToken}): Promise<IFbPost> {
+        const {created_time, id} = singlePostObject;
 
         const likePromise = FbPostPullerService.getFetchPromise(URL_FOR_FETCHING_LIKES, id, accessToken);
 
