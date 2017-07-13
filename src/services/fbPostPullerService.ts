@@ -65,7 +65,9 @@ export class FbPostPullerService extends BaseService {
 
     public static getFbPosts(args: {pageSize: number}): Promise<IFbPostPullerData[]> {
         const {pageSize} = args;
-        return models.FbPostPullerData.find({})
+        return models.FbPostPullerData.find({
+            status: FbPostStatus.PENDING
+        })
             .sort({createdAt: -1})
             .limit(pageSize)
             .exec();
