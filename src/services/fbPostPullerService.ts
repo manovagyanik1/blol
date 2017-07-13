@@ -63,6 +63,14 @@ export class FbPostPullerService extends BaseService {
 
     }
 
+    public static getFbPosts(args: {pageSize: number}): Promise<IFbPostPullerData[]> {
+        const {pageSize} = args;
+        return models.FbPostPullerData.find({})
+            .sort({createdAt: -1})
+            .limit(pageSize)
+            .exec();
+    }
+
     public static saveFbPost(posts: IFbPost[]) {
         posts.map(post => {
             return new models.FbPostPullerData({
