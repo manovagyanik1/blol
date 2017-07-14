@@ -98,6 +98,7 @@ export class FbPostPullerService extends BaseService {
         const fbPost = fbPostPullerData.jsonData;
         const fbPostImageData = fbPost.attachments.data[0].media.image as IFbPostImageData;
         const fbPostCommentData = fbPost.comments.data as IFbPostComment[];
+
     }
 
     public static saveFbPost(posts: IFbPost[]) {
