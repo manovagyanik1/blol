@@ -12,6 +12,7 @@ import {fn} from "sequelize";
 import {FbPostPullerData} from "../models/schemas/fbPostPullerData";
 import {IFbPostImageData} from "../interfaces/fbposts/iFbPostImageData";
 import {Schema} from "mongoose";
+import {IFbPostComment} from "../interfaces/fbposts/iFbPostComments";
 
 const format = require('string-format');
 const fetch = require('node-fetch');
@@ -96,7 +97,7 @@ export class FbPostPullerService extends BaseService {
     public static createOneContentFromFbPostPullerData(fbPostPullerData: IFbPostPullerData): void {
         const fbPost = fbPostPullerData.jsonData;
         const fbPostImageData = fbPost.attachments.data[0].media.image as IFbPostImageData;
-
+        const fbPostCommentData = fbPost.comments.data as IFbPostComment[];
     }
 
     public static saveFbPost(posts: IFbPost[]) {
