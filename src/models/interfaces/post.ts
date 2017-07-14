@@ -1,6 +1,7 @@
 import {PostType} from "../../constants/enums/postType";
+import {AMPostContent} from "../../apiinterfaces/AMPostContent";
 
 export interface IPost {
-    url?: string;
-    type?: PostType;
+    data: AMPostContent;
+    type: PostType;
 }

@@ -12,7 +12,8 @@
     "appId": "335195490233143",
     "redirectUri": "http://localhost:3000/v1/login/callback",
     "apiVersion": "v2.9",
-    "clientToken": "14105b034fc43eb444d755ec5d57dfd7"
+    "clientToken": "14105b034fc43eb444d755ec5d57dfd7",
+    "permanentAccessToken": "EAAEw28ggKzcBACdJBBZCsls5Xa2j3tl87WZCaOXruXgZAZBhAaj9qbXDoqTyEqjkiODsjw9RcCKQ2peXGR8ra5XAjvz1FRUgQcLMtV8vVbdWZCwOD6j8MZBOms90rUedoiSQmsA2cyrmY5ZCFymAzvtBzVdTphFGEYhFQ0fPktKWwZDZD"
   },
   "fbPostPuller": [
       {

@@ -3,12 +3,15 @@ import container from "../libs/ioc/index";
 import {IServerConfig} from "../../configurations/interfaces";
 import {IFbPage} from "../interfaces/iFbPage";
 import FBUtils from "../utils/fbUtils";
-import {IFbData} from "../interfaces/iFbData";
-import {IFbPost} from "../models/interfaces/iFbPost";
+import {IFbData} from "../interfaces/fbposts/iFbData";
+import {IFbPost} from "../interfaces/fbposts/iFbPost";
 import {FbPostStatus} from "../constants/enums/fbPostStatus";
 import {IFbPostPullerData} from "../models/interfaces/iFbPostPullerData";
 import {models} from "../models/index";
 import {fn} from "sequelize";
+import {FbPostPullerData} from "../models/schemas/fbPostPullerData";
+import {IFbPostImageData} from "../interfaces/fbposts/iFbPostImageData";
+import {Schema} from "mongoose";
 
 const format = require('string-format');
 const fetch = require('node-fetch');
@@ -24,11 +27,11 @@ const URL_FOR_FETCHING_REACTIONS:string = 'https://graph.facebook.com/v2.9/{0}/r
 
 export class FbPostPullerService extends BaseService {
 
-    public static mainCron(): Promise<any> {
+    public static mainCron(): Promise<any>[] {
         // get the list of pages obj;
         const pages: IFbPage[] = config.get("fbPostPuller");
-        return FBUtils.getAccessToken().then((accessToken: string) => {
-            return pages.map(page => {
+        const accessToken = config.get("facebook:permanentAccessToken");
+        return pages.map(page => {
                 const urlForListOfPosts = format(URL_FOR_FETCHING_POSTS, page.pageId, accessToken);
                 return fetch(urlForListOfPosts)
                     .then(response => {
@@ -49,7 +52,6 @@ export class FbPostPullerService extends BaseService {
                         return FbPostPullerService.saveFbPost(postResults);
                     });
             });
-        });
 
     }
 
@@ -83,11 +85,25 @@ export class FbPostPullerService extends BaseService {
             .where('_id').in(acceptedIds).exec();
     }
 
+    public static copyFbPostPullerDataToUserFacingDataStore(ids: string[]): Promise<any> {
+        return models.FbPostPullerData.find()
+            .where('_id').in(ids).exec()
+            .then((fbPosts: IFbPostPullerData[]) => {
+
+        });
+    }
+
+    public static createOneContentFromFbPostPullerData(fbPostPullerData: IFbPostPullerData): void {
+        const fbPost = fbPostPullerData.jsonData;
+        const fbPostImageData = fbPost.attachments.data[0].media.image as IFbPostImageData;
+
+    }
+
     public static saveFbPost(posts: IFbPost[]) {
         posts.map(post => {
             return new models.FbPostPullerData({
                 postId: post.postId,
-                jsonData: JSON.stringify(post),
+                jsonData: post,
                 postCreationTime: post.postCreationTime,
                 status: FbPostStatus.PENDING
             } as IFbPostPullerData).save();

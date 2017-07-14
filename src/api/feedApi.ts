@@ -12,7 +12,7 @@ export class FeedApi extends BaseApi {
     // returns the list of feed
     public static getFeed(request: Hapi.Request, reply: Hapi.IReply) {
 
-        const {params: {postId}, query: {beforeTimeStamp, afterTimestamp, pageSize}} = request;
+        const {query: {beforeTimeStamp, afterTimestamp, pageSize}} = request;
         const user: IUserModel = request.auth.credentials;
         const type = (afterTimestamp) ? BeforeAfter.AFTER : BeforeAfter.BEFORE;
         let timestamp = (afterTimestamp) ? afterTimestamp : beforeTimeStamp;
@@ -21,12 +21,9 @@ export class FeedApi extends BaseApi {
         }
 
         const response = FeedService.getFeed({timestamp, pageSize, type, user});
-        FbPostPullerService.mainCron()
-            .then(data => {
-                response.then((results) => {
-                    reply(PaginationWrapper.wrap({results, pageSize, request}));
-                });
-            });
+        return response.then((results) => {
+            return reply(PaginationWrapper.wrap({results, pageSize, request}));
+        });
 
 
     }
