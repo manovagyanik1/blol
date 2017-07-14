@@ -14,4 +14,16 @@ export class FbPostPullerApi extends BaseApi {
             return reply(response);
         });
     }
+
+    public static updateIds(request: Hapi.Request, reply: Hapi.IReply) {
+        const {payload:{accepted, rejected}} = request;
+        const acceptedPromise = FbPostPullerService.markIdsAsAccepted(accepted);
+        const rejectedPromise = FbPostPullerService.markIdsAsRejected(rejected);
+        return Promise.all([acceptedPromise, rejectedPromise]).then(
+            response => {
+                return reply(response);
+            }
+        );
+
+    }
 }

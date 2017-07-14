@@ -27,7 +27,7 @@ export = [
     {
         method: 'PUT',
         path: '/fb-post-puller',
-        handler: FbPostPullerApi.getFbPosts,
+        handler: FbPostPullerApi.updateIds,
         config: {
             auth: false,
             tags: ['api', 'internal', 'admin', 'content', 'enableAuth'],

@@ -73,6 +73,16 @@ export class FbPostPullerService extends BaseService {
             .exec();
     }
 
+    public static markIdsAsRejected(rejectedIds: string[]): Promise<any> {
+        return models.FbPostPullerData.update({}, {$set: {status: FbPostStatus.REJECTED}})
+            .where('_id').in(rejectedIds).exec();
+    }
+
+    public static markIdsAsAccepted(acceptedIds: string[]): Promise<any> {
+        return models.FbPostPullerData.update({}, {$set: {status: FbPostStatus.REJECTED}})
+            .where('_id').in(acceptedIds).exec();
+    }
+
     public static saveFbPost(posts: IFbPost[]) {
         posts.map(post => {
             return new models.FbPostPullerData({
