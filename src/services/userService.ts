@@ -50,7 +50,11 @@ export class UserService extends BaseService {
                 _id: {$in: userIds}
             }
         }]).exec();
-        }
+    }
+
+    public static getOrCreateUserForFacebookId(facebookId: string): Promise<IUserModel> {
+        return
+    }
 
     public static createUserOrUpdateIfExisting(args:{facebookId, fullName, email, profilePicUrl}): Promise<IUserModel> {
         return models.User.findOneAndUpdate({

@@ -12,6 +12,10 @@ export const UserSchema: Schema = new Schema({
     profilePicUrl: String,
     isFbUser: Boolean,
 }, { timestamps: true });
+UserSchema.index({facebookId:1}, {unique: true});
+UserSchema.index({isFbUser:1});
+
+
 
 
 export const User: Model<IUserModel> = model<IUserModel>("User", UserSchema);
