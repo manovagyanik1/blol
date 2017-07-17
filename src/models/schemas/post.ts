@@ -4,7 +4,7 @@ import { IPost } from "../interfaces/post";
 export interface IPostModel extends IPost, Document {
 }
 
-export var PostSchema: Schema = new Schema({
+export const PostSchema: Schema = new Schema({
   data: Schema.Types.Mixed,
   type: String,
 }, { timestamps: true });

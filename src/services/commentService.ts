@@ -56,7 +56,7 @@ export class CommentService extends BaseService {
         });
     }
 
-    public static postComment(comment: IComment): Promise<any> {
+    public static postComment(comment: IComment): Promise<ICommentModel> {
         return new models.Comment({
             text: comment.text,
             postId: comment.postId,

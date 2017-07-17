@@ -4,6 +4,7 @@ import { IUserModel } from '../models/schemas/user';
 import * as Hapi from 'hapi';
 import BaseApi from "./baseApi";
 import {CommentService} from "../services/commentService";
+import {ICommentModel} from "../models/schemas/comment";
 
 export class CommentApi extends BaseApi {
     public static getComment(request: Hapi.Request, reply: Hapi.IReply) {
@@ -21,9 +22,12 @@ export class CommentApi extends BaseApi {
         });
     }
 
-    public static postComment(request: Hapi.Request, reply: Hapi.IReply){
+    public static postComment(request: Hapi.Request, reply: Hapi.IReply) {
         const {payload: {postId, text}} = request;
         const user: IUserModel = request.auth.credentials;
-        reply(CommentService.postComment({postId, text, userId: user._id}));
+        CommentService.postComment({postId, text, userId: user._id})
+            .then((data: ICommentModel) => {
+                reply(data);
+            });
     }
 }

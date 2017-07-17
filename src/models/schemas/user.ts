@@ -5,12 +5,12 @@ export interface IUserModel extends IUser, Document {
 }
 
 export const UserSchema: Schema = new Schema({
-    facebookId: Number,
+    facebookId: String,
     email: String,
     fullName: String,
     nickName: String,
     profilePicUrl: String,
-    isFbUser: Boolean,
+    isFbUser: {type:Schema.Types.Boolean, default: false},
 }, { timestamps: true });
 UserSchema.index({facebookId:1}, {unique: true});
 UserSchema.index({isFbUser:1});

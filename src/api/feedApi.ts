@@ -19,7 +19,6 @@ export class FeedApi extends BaseApi {
         if (!timestamp) {
             timestamp = new Date();
         }
-
         const response = FeedService.getFeed({timestamp, pageSize, type, user});
         return response.then((results) => {
             return reply(PaginationWrapper.wrap({results, pageSize, request}));

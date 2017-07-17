@@ -19,7 +19,8 @@ export class FbPostPullerApi extends BaseApi {
         const {payload:{accepted, rejected}} = request;
         const acceptedPromise = FbPostPullerService.markIdsAsAccepted(accepted);
         const rejectedPromise = FbPostPullerService.markIdsAsRejected(rejected);
-        return Promise.all([acceptedPromise, rejectedPromise]).then(
+        const anyData = FbPostPullerService.copyFbPostPullerDataToUserFacingDataStore(accepted);
+        return Promise.all([acceptedPromise, rejectedPromise, anyData]).then(
             response => {
                 return reply(response);
             }

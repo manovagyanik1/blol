@@ -1,5 +1,5 @@
 export interface IUser {
-    facebookId: number;
+    facebookId: string;
     email?: string;
     fullName: string;
     nickName?: string;

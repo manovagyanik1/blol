@@ -4,11 +4,11 @@ import { IComment } from "../interfaces/comment";
 export interface ICommentModel extends IComment, Document {
 }
 
-export var CommentSchema: Schema = new Schema({
+export const CommentSchema: Schema = new Schema({
   text: String,
   userId: Schema.Types.ObjectId,
-  displayName: String,
   postId: Schema.Types.ObjectId,
+  numberOfLikes: Schema.Types.Number,
 }, { timestamps: true });
 
 CommentSchema.index({postId:1, createdAt:1});

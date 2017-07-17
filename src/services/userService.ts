@@ -8,6 +8,8 @@ import {IUser} from "../models/interfaces/user";
 
 const FB = require("fb");
 const config = container.get<IServerConfig>("IServerConfig");
+const format = require('string-format');
+const FB_PROFILE_PIC_URL_FORMAT = "http://graph.facebook.com/{0}/picture?type=square"
 
 export class UserService extends BaseService {
 
@@ -52,6 +54,7 @@ export class UserService extends BaseService {
         }]).exec();
     }
 
+
     public static getOrCreateUserForFacebookId(facebookId: string, fullName: string): Promise<IUserModel> {
         return models.User.update(
             {facebookId: facebookId},
@@ -59,7 +62,9 @@ export class UserService extends BaseService {
                 facebookId: facebookId,
                 fullName: fullName,
                 nickName: UserService.getNickName(fullName),
-            }},
+                profilePicUrl: format(FB_PROFILE_PIC_URL_FORMAT, facebookId),
+                isFbUser: true,
+            } as IUserModel},
             {upsert: true}
         ).exec();
 

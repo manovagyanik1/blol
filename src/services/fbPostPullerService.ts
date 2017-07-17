@@ -9,7 +9,7 @@ import {FbPostStatus} from "../constants/enums/fbPostStatus";
 import {IFbPostPullerData} from "../models/interfaces/iFbPostPullerData";
 import {models} from "../models/index";
 import {fn} from "sequelize";
-import {FbPostPullerData} from "../models/schemas/fbPostPullerData";
+import {FbPostPullerData, IFbPostPullerDataModel} from "../models/schemas/fbPostPullerData";
 import {IFbPostImageData} from "../interfaces/fbposts/iFbPostImageData";
 import {Schema} from "mongoose";
 import {IFbPostComment} from "../interfaces/fbposts/iFbPostComments";
@@ -18,6 +18,10 @@ import {PostType} from "../constants/enums/postType";
 import {IPost} from "../models/interfaces/post";
 import {IPostModel} from "../models/schemas/post";
 import {IComment} from "../models/interfaces/comment";
+import {UserService} from "./userService";
+import {ICommentModel} from "../models/schemas/comment";
+import {IUserModel} from "../models/schemas/user";
+import {CommentService} from "./commentService";
 
 const format = require('string-format');
 const fetch = require('node-fetch');
@@ -33,6 +37,7 @@ const URL_FOR_FETCHING_REACTIONS:string = 'https://graph.facebook.com/v2.9/{0}/r
 
 export class FbPostPullerService extends BaseService {
 
+    // pulls the data from fb pages and puts it in the db.
     public static mainCron(): Promise<any>[] {
         // get the list of pages obj;
         const pages: IFbPage[] = config.get("fbPostPuller");
@@ -47,9 +52,8 @@ export class FbPostPullerService extends BaseService {
                         const {data} = result;
                         return data.filter(FbPostPullerService.filterVeryRecentPosts(page.postDelayInMinutes));
                     })
-                    .then((result: IFbData) => {
-                        const {data} = result;
-                        return Promise.all(data.map((singlePostObject) => {
+                    .then((result: IFbData[]) => {
+                        return Promise.all(result.map((singlePostObject) => {
                             return FbPostPullerService.getFbPostResults({singlePostObject, accessToken});
                         }));
                     })
@@ -95,10 +99,14 @@ export class FbPostPullerService extends BaseService {
         return models.FbPostPullerData.find()
             .where('_id').in(ids).exec()
             .then((fbPosts: IFbPostPullerData[]) => {
+            return fbPosts.map((fbPost: IFbPostPullerData) => {
+                return FbPostPullerService.createOneContentFromFbPostPullerData(fbPost);
+            });
 
         });
     }
 
+    // TODO: make it return the Promise<Post>
     public static createOneContentFromFbPostPullerData(fbPostPullerData: IFbPostPullerData): Promise<any> {
         const fbPost = fbPostPullerData.jsonData;
         const fbPostImageData = fbPost.attachments.data[0].media.image as IFbPostImageData;
@@ -107,10 +115,17 @@ export class FbPostPullerService extends BaseService {
         return PostService.createPost(post)
             .then((postModel: IPostModel) => {
                 return fbPostCommentData.map((fbPostComment: IFbPostComment) => {
-                    const comment = {
+                    const fbCommentedUser = fbPostComment.from;
+                    return UserService.getOrCreateUserForFacebookId(fbCommentedUser.id, fbCommentedUser.name)
+                        .then((userModel: IUserModel) => {
+                            const comment = {
+                                postId: postModel._id,
+                                userId: userModel._id,
+                                text: fbPostComment.message,
+                            } as ICommentModel;
+                            return CommentService.postComment(comment);
+                        });
 
-                    } as IComment;
-                    return comment;
                 });
 
             });
@@ -118,14 +133,19 @@ export class FbPostPullerService extends BaseService {
 
     }
 
-    public static saveFbPost(posts: IFbPost[]) {
-        posts.map(post => {
+    public static saveFbPost(posts: IFbPost[]): Promise<IFbPostPullerDataModel | any>[] {
+        return posts.map(post => {
             return new models.FbPostPullerData({
                 postId: post.postId,
                 jsonData: post,
                 postCreationTime: post.postCreationTime,
                 status: FbPostStatus.PENDING
-            } as IFbPostPullerData).save();
+            } as IFbPostPullerData).save()
+                .catch(ex => {
+                    if (ex.code !== 11000) {
+                        throw ex;
+                    }
+                });
         });
     }
 
