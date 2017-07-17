@@ -7,6 +7,7 @@ import {UserReactionService} from './userReactionService';
 import {AMComment} from "../apiinterfaces/AMComment";
 import {UserService} from "./userService";
 import {UserReactionConstructor} from "../apiinterfaces/AMUserReactionValue";
+import {IComment} from "../models/interfaces/comment";
 
 export class CommentService extends BaseService {
 
@@ -42,7 +43,7 @@ export class CommentService extends BaseService {
                         return comments.map((comment:ICommentModel) => {
                             return Object.assign({}, comment.toObject(),
                                 user ? {currentUserReaction: tCommentIdToThisUserReaction[user._id]} : {},
-                                {userDetails: tUserIdToUserInfo[comment.userId]},
+                                {userDetails: tUserIdToUserInfo[comment.userId as any]},
                                 {reaction: tCommentIdToUserReactions[comment._id] ?  tCommentIdToUserReactions[comment._id] : UserReactionConstructor(0, 0, 0, 0, 0)}) as AMComment;
                         });
 
@@ -55,13 +56,11 @@ export class CommentService extends BaseService {
         });
     }
 
-    public static postComment(args: {postId: string, text: string, user: IUserModel}): Promise<any> {
-        const {postId, text, user} = args;
+    public static postComment(comment: IComment): Promise<any> {
         return new models.Comment({
-            text,
-            postId,
-            userId: user._id,
-            displayName: user.fullName // TODO: change to nickname
+            text: comment.text,
+            postId: comment.postId,
+            userId: comment.userId,
         }).save();
     }
 }

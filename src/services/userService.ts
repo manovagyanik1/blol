@@ -2,8 +2,9 @@ import BaseService from "./baseService";
 import { models } from '../models';
 import container from "../libs/ioc";
 import { IServerConfig } from "../../configurations/interfaces";
-import {Types} from "mongoose";
+import {Schema, Types} from "mongoose";
 import {IUserModel} from "../models/schemas/user";
+import {IUser} from "../models/interfaces/user";
 
 const FB = require("fb");
 const config = container.get<IServerConfig>("IServerConfig");
@@ -43,11 +44,26 @@ export class UserService extends BaseService {
     });
     }
 
-    public static getForIds(userIds: Types.ObjectId[]): Promise<IUserModel[]> {
+    public static getForIds(userIds: Array<Schema.Types.ObjectId>): Promise<IUserModel[]> {
        return models.User.aggregate([{
             $match: {
                 _id: {$in: userIds}
             }
         }]).exec();
         }
+
+    public static createUserOrUpdateIfExisting(args:{facebookId, fullName, email, profilePicUrl}): Promise<IUserModel> {
+        return models.User.findOneAndUpdate({
+            facebookId: args.facebookId,
+            fullName: args.fullName,
+            email: args.email,
+            nickName: UserService.getNickName(args.fullName),
+            profilePicUrl: args.profilePicUrl,
+        }, {}, {upsert: true, new: true, setDefaultsOnInsert: true})
+            .exec();
+    }
+
+    private static getNickName(fullName: string): string {
+        return fullName.split(" ")[0];
+    }
 }

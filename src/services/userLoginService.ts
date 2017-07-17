@@ -3,6 +3,7 @@ import BaseService from "./baseService";
 import { models } from '../models';
 import container from "../libs/ioc";
 import { IServerConfig } from "../../configurations/interfaces";
+import {UserService} from "./userService";
 
 const FB = require("fb");
 const config = container.get<IServerConfig>("IServerConfig");
@@ -31,13 +32,14 @@ export class UserLoginService extends BaseService {
                     if (res && res.error) {
                         reject(res.error);
                     } else {
-                        const {id, name, email, picture: {data: {url}}} = res;
-                        models.User.findOneAndUpdate({
+
+                        const {id, name, email, picture: {data: {profilePicUrl}}} = res;
+                        UserService.createUserOrUpdateIfExisting({
                             facebookId: id,
                             fullName: name,
-                            email,
-                            profilePicUrl: url,
-                        }, {}, {upsert: true, new: true, setDefaultsOnInsert: true})
+                            email: email,
+                            profilePicUrl: profilePicUrl,
+                        })
                         .then((data) => {
                             // get JWT token and insert into request/response
                             const jwtToken: string = JWTUtils.signJWTToken(data.toObject());
@@ -49,8 +51,5 @@ export class UserLoginService extends BaseService {
         });
     }
 
-    public static isNewUser(): boolean {
-        return true;
-    }
 
 }

@@ -13,6 +13,11 @@ import {FbPostPullerData} from "../models/schemas/fbPostPullerData";
 import {IFbPostImageData} from "../interfaces/fbposts/iFbPostImageData";
 import {Schema} from "mongoose";
 import {IFbPostComment} from "../interfaces/fbposts/iFbPostComments";
+import {PostService} from "./postService";
+import {PostType} from "../constants/enums/postType";
+import {IPost} from "../models/interfaces/post";
+import {IPostModel} from "../models/schemas/post";
+import {IComment} from "../models/interfaces/comment";
 
 const format = require('string-format');
 const fetch = require('node-fetch');
@@ -94,10 +99,22 @@ export class FbPostPullerService extends BaseService {
         });
     }
 
-    public static createOneContentFromFbPostPullerData(fbPostPullerData: IFbPostPullerData): void {
+    public static createOneContentFromFbPostPullerData(fbPostPullerData: IFbPostPullerData): Promise<any> {
         const fbPost = fbPostPullerData.jsonData;
         const fbPostImageData = fbPost.attachments.data[0].media.image as IFbPostImageData;
         const fbPostCommentData = fbPost.comments.data as IFbPostComment[];
+        const post = {type: PostType.IMAGE, data: fbPostImageData} as IPost;
+        return PostService.createPost(post)
+            .then((postModel: IPostModel) => {
+                return fbPostCommentData.map((fbPostComment: IFbPostComment) => {
+                    const comment = {
+
+                    } as IComment;
+                    return comment;
+                });
+
+            });
+
 
     }
 

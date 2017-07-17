@@ -24,6 +24,6 @@ export class CommentApi extends BaseApi {
     public static postComment(request: Hapi.Request, reply: Hapi.IReply){
         const {payload: {postId, text}} = request;
         const user: IUserModel = request.auth.credentials;
-        reply(CommentService.postComment({postId, text, user}));
+        reply(CommentService.postComment({postId, text, userId: user._id}));
     }
 }
