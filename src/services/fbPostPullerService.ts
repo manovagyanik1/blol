@@ -91,7 +91,7 @@ export class FbPostPullerService extends BaseService {
     }
 
     public static markIdsAsAccepted(acceptedIds: string[]): Promise<any> {
-        return models.FbPostPullerData.update({}, {$set: {status: FbPostStatus.REJECTED}})
+        return models.FbPostPullerData.update({}, {$set: {status: FbPostStatus.ACCEPTED}})
             .where('_id').in(acceptedIds).exec();
     }
 
