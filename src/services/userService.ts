@@ -45,15 +45,24 @@ export class UserService extends BaseService {
     }
 
     public static getForIds(userIds: Array<Schema.Types.ObjectId>): Promise<IUserModel[]> {
-       return models.User.aggregate([{
+        return models.User.aggregate([{
             $match: {
                 _id: {$in: userIds}
             }
         }]).exec();
     }
 
-    public static getOrCreateUserForFacebookId(facebookId: string): Promise<IUserModel> {
-        return
+    public static getOrCreateUserForFacebookId(facebookId: string, fullName: string): Promise<IUserModel> {
+        return models.User.update(
+            {facebookId: facebookId},
+            {$setOnInsert: {
+                facebookId: facebookId,
+                fullName: fullName,
+                nickName: UserService.getNickName(fullName),
+            }},
+            {upsert: true}
+        ).exec();
+
     }
 
     public static createUserOrUpdateIfExisting(args:{facebookId, fullName, email, profilePicUrl}): Promise<IUserModel> {
