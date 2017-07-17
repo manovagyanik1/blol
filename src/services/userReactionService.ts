@@ -22,7 +22,7 @@ export class UserReactionService extends BaseService {
                 return models.UserReaction.findOne(query).exec();
             }
 
-    public static getThisUserReactionForTargetIds(targetIds: Types.ObjectId[], user:IUserModel): Promise<any> {
+    public static getThisUserReactionForTargetIds(targetIds: Schema.Types.ObjectId[], user:IUserModel): Promise<any> {
         return user ?
         models.UserReaction.aggregate([
             {
@@ -39,7 +39,7 @@ export class UserReactionService extends BaseService {
             }) : {};
     }
 
-    public static getAggregatedUserReactionsForTargetIds(targetIds: Types.ObjectId[]): Promise<any> {
+    public static getAggregatedUserReactionsForTargetIds(targetIds: Schema.Types.ObjectId[]): Promise<any> {
         return models.UserReaction.aggregate([
                 {
                     $match: {

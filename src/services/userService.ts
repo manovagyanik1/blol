@@ -9,7 +9,7 @@ import {IUser} from "../models/interfaces/user";
 const FB = require("fb");
 const config = container.get<IServerConfig>("IServerConfig");
 const format = require('string-format');
-const FB_PROFILE_PIC_URL_FORMAT = "http://graph.facebook.com/{0}/picture?type=square"
+const FB_PROFILE_PIC_URL_FORMAT = "http://graph.facebook.com/{0}/picture?type=large"
 
 export class UserService extends BaseService {
 

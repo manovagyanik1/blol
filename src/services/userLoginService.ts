@@ -24,8 +24,8 @@ export class UserLoginService extends BaseService {
                     reject(res.error);
                 }
 
-                var accessToken = res.access_token;
-                var expires = res.expires ? res.expires : 0;
+                const accessToken = res.access_token;
+                const expires = res.expires ? res.expires : 0;
                 FB.options({accessToken});
 
                 FB.api('/me', {fields: 'id, name, email, picture.type(large)'}, (res) => {
@@ -43,7 +43,7 @@ export class UserLoginService extends BaseService {
                         .then((data) => {
                             // get JWT token and insert into request/response
                             const jwtToken: string = JWTUtils.signJWTToken(data.toObject());
-                            resolve({token: jwtToken});
+                            resolve({token: jwtToken, userId: data._id});
                         });
                     }
                 });

@@ -8,8 +8,36 @@ import {AMComment} from "../apiinterfaces/AMComment";
 import {UserService} from "./userService";
 import {UserReactionConstructor} from "../apiinterfaces/AMUserReactionValue";
 import {IComment} from "../models/interfaces/comment";
+import {Schema} from "mongoose";
 
 export class CommentService extends BaseService {
+
+    public static getCommentCount(postIds: Schema.Types.ObjectId[]): Promise<any> {
+       return models.Comment.aggregate([
+           {
+               $match: {
+                   postId: {$in: postIds}
+               }
+           },
+           {
+               $group: {
+                   _id: {
+                       postId: "$postId",
+                   },
+                   "postId": {$first: "$postId"},
+                   "commentCount": {$sum: 1},
+               }
+           }
+           ]
+       ).exec()
+           .then((postIdAndCommentCountPairs: Object[]) => {
+               return postIdAndCommentCountPairs.reduce((pre, postIdAndCommentCountPair) => {
+                   pre[postIdAndCommentCountPair['postId']] = postIdAndCommentCountPair['commentCount'];
+                   return pre;
+                   }
+                   , {});
+        });
+    }
 
     public static getComments(args: {postId: string, user: IUserModel, timestamp: number, type: BeforeAfter, pageSize: number}): Promise<AMComment[]> {
         const {user, postId, timestamp, type, pageSize} = args;

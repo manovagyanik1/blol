@@ -9,5 +9,6 @@ export interface AMPost {
     data: AMPostContent;
     type: PostType;
     userReaction: AMUserReactionValue;
+    commentCount: number;
     currentUserReaction?: ReactionType;
 }
