@@ -14,6 +14,9 @@
     "apiVersion": "v2.9",
     "clientToken": "14105b034fc43eb444d755ec5d57dfd7"
   },
+  "sentry": {
+    "DSN": "https://6f4fb08e5b15489f9be1874fadcf0dfe:e6bb5562b52c407bbe1edf17f7b45adc@sentry.io/192897"
+  },
   "auth": {
     "enabled": true
   },
