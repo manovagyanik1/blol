@@ -15,6 +15,9 @@
     "clientToken": "14105b034fc43eb444d755ec5d57dfd7",
     "permanentAccessToken": "EAAEw28ggKzcBACdJBBZCsls5Xa2j3tl87WZCaOXruXgZAZBhAaj9qbXDoqTyEqjkiODsjw9RcCKQ2peXGR8ra5XAjvz1FRUgQcLMtV8vVbdWZCwOD6j8MZBOms90rUedoiSQmsA2cyrmY5ZCFymAzvtBzVdTphFGEYhFQ0fPktKWwZDZD"
   },
+  "sentry": {
+    "DSN": "https://202dbea09dad462c9cab7e9f56144bcc:d07470347a7c49d18b8ce81e6bfe3982@sentry.io/192493"
+  },
   "fbPostPuller": [
       {
         "pageId": 1515871602074952,

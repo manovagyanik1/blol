@@ -61,6 +61,7 @@
     "hapi": "^15.2.0",
     "hapi-auth-jwt2": "^7.2.3",
     "hapi-pagination": "^1.20.0",
+    "hapi-raven-boom": "^6.1.0",
     "hapi-swagger": "^7.4.0",
     "html-pdf": "^2.1.0",
     "image-diff": "^1.6.3",
