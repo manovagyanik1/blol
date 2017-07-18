@@ -19,6 +19,7 @@ import {UserService} from "./userService";
 import {ICommentModel} from "../models/schemas/comment";
 import {IUserModel} from "../models/schemas/user";
 import {CommentService} from "./commentService";
+import RandomUtils from "../utils/randomUtils";
 
 const format = require('string-format');
 const fetch = require('node-fetch');
@@ -36,7 +37,7 @@ const URL_FOR_FETCHING_REACTIONS:string = 'https://graph.facebook.com/v2.9/{0}/r
 export class FbPostPullerService extends BaseService {
 
     // pulls the data from fb pages and puts it in the db.
-    public static mainCron(): Promise<any>[] {
+    public static PullsLast100FbPostsFromPages(): Promise<any>[] {
         // get the list of pages obj;
         const pages: IFbPage[] = config.get("fbPostPuller");
         const accessToken = config.get("facebook:permanentAccessToken");
@@ -88,7 +89,14 @@ export class FbPostPullerService extends BaseService {
             });
     }
 
-    private static getAllTopCommentsForPage({url, page, accessToken}): Promise<any> {
+    public static fetchAllCommentsFromSarcasmAndUpdateFbPostPullerData(): Promise<any> {
+        const accessToken = config.get("facebook:permanentAccessToken");
+        const sarcasmPage = config.get("sarcasmPage") as IFbPage;
+        return FbPostPullerService.getCommentsFromSarcasmAndUpdateFbPostPullerDataRecursive({page: sarcasmPage, accessToken});
+    }
+
+    private static getCommentsFromSarcasmAndUpdateFbPostPullerDataRecursive({page, accessToken}): Promise<any> {
+        const url = format(URL_FOR_FETCHING_POSTS, page.pageId, accessToken);
         return fetch(url)
             .then(response => {
                 return response.json();
@@ -96,18 +104,20 @@ export class FbPostPullerService extends BaseService {
             .then((result: IFbPostsList) => {
                 const {data, paging} = result;
                 if (paging.next) {
-                    FbPostPullerService.getAllPostsForUrlRecursive({url: paging.next, page, accessToken});
+                    FbPostPullerService.getCommentsFromSarcasmAndUpdateFbPostPullerDataRecursive({page, accessToken});
                 }
-                return data.filter(FbPostPullerService.filterVeryRecentPosts(page.postDelayInMinutes));
+                return data;
             })
-            .then((result: IFbPostsList[]) => {
+            .then((result: {id}[]) => {
                 return Promise.all(result.map((singlePostObject) => {
-                    return FbPostPullerService.getFbPostResults({singlePostObject, accessToken});
+                    const {id} = singlePostObject;
+                    const randomNumber = RandomUtils.getRandomIntegerInclusive(5, 10); // can be in config
+                    return FbPostPullerService.getFetchPromise(URL_FOR_FETCHING_COMMENTS + "&limit=" + randomNumber, id, accessToken)
+                        .then(response => response.json());
                 }));
             })
-            .then(postResults => {
-                // List of objects {id, likes, comments ... }
-                return FbPostPullerService.saveFbPost(postResults);
+            .then(commentResults => {
+                return commentResults.map(commentResult => FbPostPullerService.updateCommentInLolMeNow(commentResult));
             });
     }
 
@@ -248,4 +258,17 @@ export class FbPostPullerService extends BaseService {
     }
 
 
+    private static updateCommentInLolMeNow(commentResult: any) {
+
+        models.FbPostPullerData.findOne({
+            status: FbPostStatus.PENDING
+        }).then((data: IFbPostPullerDataModel) => {
+            data.jsonData.comments = commentResult;
+            data.markModified('jsonData');
+            data.status = FbPostStatus.ACCEPTED;
+            return data.save();
+        });
+
+
+    }
 }
