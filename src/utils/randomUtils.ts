@@ -5,7 +5,7 @@ export default class RandomUtils {
         temp.push(n);
         const ret = [];
         for ( let i = 0; i < x - 1; i++) {
-            temp.push( Math.round(Math.random() * n));
+            temp.push( RandomUtils.getRandomIntegerInclusive(0, n));
         }
         temp.sort();
         for ( let i = 1; i < temp.length; i ++) {
@@ -14,4 +14,7 @@ export default class RandomUtils {
         return ret;
     }
 
+    public static getRandomIntegerInclusive(lo: number, hi: number): number {
+        return Math.round(Math.random() * (hi - lo)) + lo;
+    }
 }
