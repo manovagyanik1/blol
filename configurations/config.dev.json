@@ -20,9 +20,9 @@
   },
   "fbPostPuller": [
       {
-        "pageId": 1515871602074952,
+        "pageId": 119554311935735,
         "cronString": "",
-        "postDelayInMinutes": 300,
+        "postDelayInMinutes": 0,
         "commentCount": 10
       }
   ],

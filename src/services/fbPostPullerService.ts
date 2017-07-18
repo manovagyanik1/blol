@@ -2,13 +2,11 @@ import BaseService from "./baseService";
 import container from "../libs/ioc/index";
 import {IServerConfig} from "../../configurations/interfaces";
 import {IFbPage} from "../interfaces/iFbPage";
-import FBUtils from "../utils/fbUtils";
-import {IFbData} from "../interfaces/fbposts/iFbData";
+import {IFbPostsList} from "../interfaces/fbposts/iFbPostsList";
 import {IFbPost} from "../interfaces/fbposts/iFbPost";
 import {FbPostStatus} from "../constants/enums/fbPostStatus";
 import {IFbPostPullerData} from "../models/interfaces/iFbPostPullerData";
 import {models} from "../models/index";
-import {fn} from "sequelize";
 import {FbPostPullerData, IFbPostPullerDataModel} from "../models/schemas/fbPostPullerData";
 import {IFbPostImageData} from "../interfaces/fbposts/iFbPostImageData";
 import {Schema} from "mongoose";
@@ -17,7 +15,6 @@ import {PostService} from "./postService";
 import {PostType} from "../constants/enums/postType";
 import {IPost} from "../models/interfaces/post";
 import {IPostModel} from "../models/schemas/post";
-import {IComment} from "../models/interfaces/comment";
 import {UserService} from "./userService";
 import {ICommentModel} from "../models/schemas/comment";
 import {IUserModel} from "../models/schemas/user";
@@ -35,6 +32,7 @@ const URL_FOR_FETCHING_COMMENTS:string = 'https://graph.facebook.com/v2.9/{0}/co
 const URL_FOR_FETCHING_SHARES:string = 'https://graph.facebook.com/v2.9/{0}/sharedposts?summary=true&access_token={1}&limit=100';
 const URL_FOR_FETCHING_REACTIONS:string = 'https://graph.facebook.com/v2.9/{0}/reactions?summary=true&access_token={1}&limit=100';
 
+
 export class FbPostPullerService extends BaseService {
 
     // pulls the data from fb pages and puts it in the db.
@@ -48,11 +46,11 @@ export class FbPostPullerService extends BaseService {
                     .then(response => {
                         return response.json();
                     })
-                    .then((result: IFbData) => {
+                    .then((result: IFbPostsList) => {
                         const {data} = result;
                         return data.filter(FbPostPullerService.filterVeryRecentPosts(page.postDelayInMinutes));
                     })
-                    .then((result: IFbData[]) => {
+                    .then((result: IFbPostsList[]) => {
                         return Promise.all(result.map((singlePostObject) => {
                             return FbPostPullerService.getFbPostResults({singlePostObject, accessToken});
                         }));
@@ -65,6 +63,65 @@ export class FbPostPullerService extends BaseService {
 
     }
 
+    // TODO: fix return types
+    // Test this
+    private static getAllPostsForUrlRecursive({url, page, accessToken}): Promise<any> {
+        return fetch(url)
+            .then(response => {
+                return response.json();
+            })
+            .then((result: IFbPostsList) => {
+                const {data, paging} = result;
+                if (paging.next) {
+                    FbPostPullerService.getAllPostsForUrlRecursive({url: paging.next, page, accessToken});
+                }
+                return data.filter(FbPostPullerService.filterVeryRecentPosts(page.postDelayInMinutes));
+            })
+            .then((result: IFbPostsList[]) => {
+                return Promise.all(result.map((singlePostObject) => {
+                    return FbPostPullerService.getFbPostResults({singlePostObject, accessToken});
+                }));
+            })
+            .then(postResults => {
+                // List of objects {id, likes, comments ... }
+                return FbPostPullerService.saveFbPost(postResults);
+            });
+    }
+
+    private static getAllTopCommentsForPage({url, page, accessToken}): Promise<any> {
+        return fetch(url)
+            .then(response => {
+                return response.json();
+            })
+            .then((result: IFbPostsList) => {
+                const {data, paging} = result;
+                if (paging.next) {
+                    FbPostPullerService.getAllPostsForUrlRecursive({url: paging.next, page, accessToken});
+                }
+                return data.filter(FbPostPullerService.filterVeryRecentPosts(page.postDelayInMinutes));
+            })
+            .then((result: IFbPostsList[]) => {
+                return Promise.all(result.map((singlePostObject) => {
+                    return FbPostPullerService.getFbPostResults({singlePostObject, accessToken});
+                }));
+            })
+            .then(postResults => {
+                // List of objects {id, likes, comments ... }
+                return FbPostPullerService.saveFbPost(postResults);
+            });
+    }
+
+    // TODO: fix return types
+    public static fetchAllPostsFromFbPage(): Promise<any>[] {
+        // get the list of pages obj;
+        const pages: IFbPage[] = config.get("fbPostPuller");
+        const accessToken = config.get("facebook:permanentAccessToken");
+        return pages.map(page => {
+            const urlForListOfPosts = format(URL_FOR_FETCHING_POSTS, page.pageId, accessToken);
+            return FbPostPullerService.getAllPostsForUrlRecursive({url: urlForListOfPosts, page, accessToken});
+        });
+    }
+
     public static filterVeryRecentPosts(thresholdDelayInMinutes: number): (IFbPostItem) => boolean {
         return (fbPost) => {
             const curDate = new Date();
@@ -72,7 +129,6 @@ export class FbPostPullerService extends BaseService {
 
             return differenceInMinutes > thresholdDelayInMinutes ? true : false;
         };
-
     }
 
     public static getFbPosts(args: {pageSize: number}): Promise<IFbPostPullerData[]> {
