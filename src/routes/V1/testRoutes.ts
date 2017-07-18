@@ -19,6 +19,23 @@ export = [
                 },
             }
         }
+    },
+    {
+        method: 'GET',
+        path: '/testImage',
+        handler: TestApi.testImage,
+        config: {
+            auth: false,
+            tags: ['api', 'test', 'facebook run'],
+            description: 'run the facebook cron to pull pages data and dump',
+            plugins: {
+                'hapi-swagger': {
+                    responses: {
+                        '400': {description: 'Bad Request'}
+                    }
+                },
+            }
+        }
     }
 ];
 
