@@ -7,8 +7,8 @@ export interface IUserReactionModel extends IUserReaction, Document {
 export var UserReactionSchema: Schema = new Schema({
   targetId: Schema.Types.ObjectId,
   userId: Schema.Types.ObjectId,
-  reaction: String,
-  type: String,
+  reaction: {type: Schema.Types.String, enum: ["LOL", "POOP"]},
+  type: [],
 }, { timestamps: true });
 UserReactionSchema.index({targetId:1, reaction:1});
 UserReactionSchema.index({targetId:1, UserId:1}, {unique:true});

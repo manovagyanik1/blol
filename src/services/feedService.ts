@@ -34,7 +34,7 @@ export class FeedService extends BaseService {
                         return posts.map((post: IPostModel) => {
                                 return Object.assign({},
                                     post.toObject(),
-                                    {userReaction: postReactions[post._id] ? postReactions[post._id] : UserReactionConstructor(0, 0, 0, 0, 0)},
+                                    {userReaction: postReactions[post._id] ? postReactions[post._id] : UserReactionConstructor(0, 0)},
                                     {currentUserReaction: currentUserReactions[post._id] ? currentUserReactions[post._id] : null},
                                     {commentCount: commentCounts[post._id]}
                                 ) as AMPost;

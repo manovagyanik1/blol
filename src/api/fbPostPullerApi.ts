@@ -2,6 +2,8 @@ import * as Hapi from 'hapi';
 import BaseApi from "./baseApi";
 import {FeedService} from "../services/feedService";
 import {FbPostPullerService} from "../services/fbPostPullerService";
+import {IFbPostPullerDataModel} from "../models/schemas/fbPostPullerData";
+import {Schema} from "mongoose";
 
 export class FbPostPullerApi extends BaseApi {
 
@@ -25,6 +27,22 @@ export class FbPostPullerApi extends BaseApi {
                 return reply(response);
             }
         );
+    }
 
+    public static copyDataFromFbPostPullerToUserFacing(request: Hapi.Request, reply: Hapi.IReply) {
+        const {query: {limit}} = request;
+        return FbPostPullerService.getFirstNPendingFbPostPullerDataIds(limit)
+            .then((results: IFbPostPullerDataModel[]) => {
+                return results.map((result: IFbPostPullerDataModel) => {
+                    return result._id;
+                });
+            })
+            .then((objectIds: Schema.Types.ObjectId[]) => {
+                const stringObjectIds = objectIds.map(objectId => objectId.toString());
+                FbPostPullerService.markIdsAsAccepted(stringObjectIds)
+                    .then((uselessResult) => {
+                        return FbPostPullerService.copyFbPostPullerDataToUserFacingDataStore(stringObjectIds);
+                    });
+            });
     }
 }

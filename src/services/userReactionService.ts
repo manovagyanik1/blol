@@ -6,7 +6,7 @@ import {Schema, Types} from 'mongoose';
 import {IUserReactionModel} from '../models/schemas/userReaction';
 import {ReactionType} from '../constants/enums/reactionType';
 import {TargetType} from '../constants/enums/targetType';
-import { IPostReaction } from "../interfaces/iPostReaction";
+import { IReaction } from "../interfaces/iReaction";
 import {IUser} from "../models/interfaces/user";
 
 export class UserReactionService extends BaseService {
@@ -18,7 +18,7 @@ export class UserReactionService extends BaseService {
                 const query = user ? {
                     targetId,
                     userId: user._id
-                } : { targetId}
+                } : { targetId};
                 return models.UserReaction.findOne(query).exec();
             }
 
@@ -68,24 +68,9 @@ export class UserReactionService extends BaseService {
                                     $cond : { if: { $eq: [ '$reaction', 'LOL' ] }, then: '$reactionCount', else: 0 }
                                 }
                         },
-                        "HAHA": {
+                        "POOP": {
                             $sum: {
-                                $cond : { if: { $eq: [ '$reaction', 'HAHA' ] }, then: '$reactionCount', else: 0 }
-                            }
-                        },
-                        "CLAP": {
-                            $sum: {
-                                $cond : { if: { $eq: [ '$reaction', 'CLAP' ] }, then: '$reactionCount', else: 0 }
-                            }
-                        },
-                        "WOW": {
-                            $sum: {
-                                $cond : { if: { $eq: [ '$reaction', 'WOW' ] }, then: '$reactionCount', else: 0 }
-                            }
-                        },
-                        "LIKE": {
-                            $sum: {
-                                $cond : { if: { $eq: [ '$reaction', 'LIKE' ] }, then: '$reactionCount', else: 0 }
+                                $cond: {if: {$eq: ['$reaction', 'POOP']}, then: '$reactionCount', else: 0}
                             }
                         }
                     }
@@ -93,9 +78,9 @@ export class UserReactionService extends BaseService {
             ])
             .exec()
             .then((userReactions: Object[] ) =>
-                userReactions.reduce((pre, userReaction:IPostReaction) => {
-                    const {CLAP, WOW, HAHA, LOL} = userReaction;
-                    pre[userReaction['targetId']] = {CLAP, WOW, HAHA, LOL};
+                userReactions.reduce((pre, userReaction:IReaction) => {
+                    const {LOL, POOP} = userReaction;
+                    pre[userReaction['targetId']] = {LOL, POOP};
                     return pre;
                 }, {})
             );

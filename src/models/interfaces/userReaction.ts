@@ -4,5 +4,5 @@ export interface IUserReaction {
   targetId: any;
   userId: any;
   reaction: ReactionType;
-  type: "COMMENT"| "POST";
+  type: ReactionType;
 }

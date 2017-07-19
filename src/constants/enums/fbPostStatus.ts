@@ -1,5 +1,6 @@
 export enum FbPostStatus {
-    ACCEPTED,
-    REJECTED,
-    PENDING,
+    ACCEPTED = "ACCEPTED",
+    REJECTED = "REJECTED",
+    PENDING = "PENDING",
+    WAITING = "WAITING",
 }

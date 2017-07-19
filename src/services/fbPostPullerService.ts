@@ -20,13 +20,14 @@ import {ICommentModel} from "../models/schemas/comment";
 import {IUserModel} from "../models/schemas/user";
 import {CommentService} from "./commentService";
 import RandomUtils from "../utils/randomUtils";
+import {IReaction} from "../interfaces/iReaction";
 
 const format = require('string-format');
 const fetch = require('node-fetch');
 
 
 const config = container.get<IServerConfig>("IServerConfig");
-const URL_FOR_FETCHING_POSTS:string = 'https://graph.facebook.com/v2.9/{0}/posts?access_token={1}&limit=100';
+const URL_FOR_FETCHING_POSTS:string = 'https://graph.facebook.com/v2.9/{0}/posts?access_token={1}&limit=3';
 const URL_FOR_FETCHING_LIKES:string = 'https://graph.facebook.com/v2.9/{0}/likes?summary=true&access_token={1}&limit=100';
 const URL_FOR_FETCHING_ATTACHMENTS:string = 'https://graph.facebook.com/v2.9/{0}/attachments?summary=true&access_token={1}&limit=100';
 const URL_FOR_FETCHING_COMMENTS:string = 'https://graph.facebook.com/v2.9/{0}/comments?summary=true&access_token={1}&limit=100';
@@ -37,7 +38,7 @@ const URL_FOR_FETCHING_REACTIONS:string = 'https://graph.facebook.com/v2.9/{0}/r
 export class FbPostPullerService extends BaseService {
 
     // pulls the data from fb pages and puts it in the db.
-    public static PullsLast100FbPostsFromPages(): Promise<any>[] {
+    public static PullsLast100FbPostsFromPagesDefinedInConfig(): Promise<any>[] {
         // get the list of pages obj;
         const pages: IFbPage[] = config.get("fbPostPuller");
         const accessToken = config.get("facebook:permanentAccessToken");
@@ -86,17 +87,25 @@ export class FbPostPullerService extends BaseService {
             .then(postResults => {
                 // List of objects {id, likes, comments ... }
                 return FbPostPullerService.saveFbPost(postResults);
+            }).catch((ex) => {
+                console.log(ex);
+                return FbPostPullerService.getAllPostsForUrlRecursive({url, page, accessToken});
             });
     }
 
-    public static fetchAllCommentsFromSarcasmAndUpdateFbPostPullerData(): Promise<any> {
+    public static fetchNCommentsFromSarcasmAndUpdateFbPostPullerData(n: number): Promise<any> {
         const accessToken = config.get("facebook:permanentAccessToken");
         const sarcasmPage = config.get("sarcasmPage") as IFbPage;
-        return FbPostPullerService.getCommentsFromSarcasmAndUpdateFbPostPullerDataRecursive({page: sarcasmPage, accessToken});
+        const url = format(URL_FOR_FETCHING_POSTS, sarcasmPage.pageId, accessToken);
+
+        return FbPostPullerService.getCommentsFromSarcasmAndUpdateFbPostPullerDataRecursive({url, accessToken, n});
     }
 
-    private static getCommentsFromSarcasmAndUpdateFbPostPullerDataRecursive({page, accessToken}): Promise<any> {
-        const url = format(URL_FOR_FETCHING_POSTS, page.pageId, accessToken);
+    private static getCommentsFromSarcasmAndUpdateFbPostPullerDataRecursive({url, accessToken, n}): Promise<any> {
+        const num = n;
+        if (num < 0 ) {
+            return;
+        }
         return fetch(url)
             .then(response => {
                 return response.json();
@@ -104,7 +113,9 @@ export class FbPostPullerService extends BaseService {
             .then((result: IFbPostsList) => {
                 const {data, paging} = result;
                 if (paging.next) {
-                    FbPostPullerService.getCommentsFromSarcasmAndUpdateFbPostPullerDataRecursive({page, accessToken});
+                    FbPostPullerService.getCommentsFromSarcasmAndUpdateFbPostPullerDataRecursive(
+                        {url: paging.next, accessToken, n:num - data.length }
+                        );
                 }
                 return data;
             })
@@ -122,7 +133,7 @@ export class FbPostPullerService extends BaseService {
     }
 
     // TODO: fix return types
-    public static fetchAllPostsFromFbPage(): Promise<any>[] {
+    public static fetchAllPostsFromFbPages(): Promise<any>[] {
         // get the list of pages obj;
         const pages: IFbPage[] = config.get("fbPostPuller");
         const accessToken = config.get("facebook:permanentAccessToken");
@@ -151,12 +162,12 @@ export class FbPostPullerService extends BaseService {
             .exec();
     }
 
-    public static markIdsAsRejected(rejectedIds: string[]): Promise<any> {
+    public static markIdsAsRejected(rejectedIds: string[]): Promise<IFbPostPullerDataModel> {
         return models.FbPostPullerData.update({}, {$set: {status: FbPostStatus.REJECTED}})
             .where('_id').in(rejectedIds).exec();
     }
 
-    public static markIdsAsAccepted(acceptedIds: string[]): Promise<any> {
+    public static markIdsAsAccepted(acceptedIds: string[]): Promise<IFbPostPullerDataModel> {
         return models.FbPostPullerData.update({}, {$set: {status: FbPostStatus.ACCEPTED}})
             .where('_id').in(acceptedIds).exec();
     }
@@ -172,12 +183,23 @@ export class FbPostPullerService extends BaseService {
         });
     }
 
+    private static generateReaction(n: number): IReaction {
+        const randomNumberArray = RandomUtils.getXRandomNumbersThatSumToN(2, n);
+        return {LOL: randomNumberArray[0], POOP: randomNumberArray[1]} as IReaction;
+    }
+
     // TODO: make it return the Promise<Post>
     public static createOneContentFromFbPostPullerData(fbPostPullerData: IFbPostPullerData): Promise<any> {
         const fbPost = fbPostPullerData.jsonData;
         const fbPostImageData = fbPost.attachments.data[0].media.image as IFbPostImageData;
         const fbPostCommentData = fbPost.comments.data as IFbPostComment[];
-        const post = {type: PostType.IMAGE, data: fbPostImageData} as IPost;
+        const postReactionsLow = config.get("reactions:postReactionsLow");
+        const postReactionsHi = config.get("reactions:postReactionsHi");
+        const commentReactionsLow = config.get("reactions:commentReactionsLow");
+        const commentReactionsHi = config.get("reaction:commentReactionsHi");
+        const postReaction = FbPostPullerService.
+            generateReaction(RandomUtils.getRandomIntegerInclusive(postReactionsLow, postReactionsHi));
+        const post = {type: PostType.IMAGE, data: fbPostImageData, reactions: postReaction} as IPost;
         return PostService.createPost(post)
             .then((postModel: IPostModel) => {
                 return fbPostCommentData.map((fbPostComment: IFbPostComment) => {
@@ -188,6 +210,9 @@ export class FbPostPullerService extends BaseService {
                                 postId: postModel._id,
                                 userId: userModel._id,
                                 text: fbPostComment.message,
+                                reactions:
+                                    FbPostPullerService.generateReaction(
+                                        RandomUtils.getRandomIntegerInclusive(commentReactionsLow, commentReactionsHi))
                             } as ICommentModel;
                             return CommentService.postComment(comment);
                         });
@@ -259,16 +284,20 @@ export class FbPostPullerService extends BaseService {
 
 
     private static updateCommentInLolMeNow(commentResult: any) {
-
-        models.FbPostPullerData.findOne({
+        console.log("here");
+        models.FbPostPullerData.findOneAndUpdate({
             status: FbPostStatus.PENDING
-        }).then((data: IFbPostPullerDataModel) => {
-            data.jsonData.comments = commentResult;
-            data.markModified('jsonData');
-            data.status = FbPostStatus.ACCEPTED;
-            return data.save();
-        });
+        },
+            {$set:{
+                status: FbPostStatus.WAITING,
+                "jsonData.comments": commentResult,
+            }});
+    }
 
-
+    public static getFirstNPendingFbPostPullerDataIds(n: number): Promise<IFbPostPullerDataModel[]> {
+        return models.FbPostPullerData.find({
+            status: FbPostStatus.PENDING
+        }).limit(n)
+            .exec();
     }
 }

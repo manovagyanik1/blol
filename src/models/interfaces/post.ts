@@ -1,8 +1,9 @@
 import {PostType} from "../../constants/enums/postType";
 import {AMPostContent} from "../../apiinterfaces/AMPostContent";
-import {IPostReaction} from "../../interfaces/iPostReaction";
+import {IReaction} from "../../interfaces/iReaction";
 
 export interface IPost {
     data: AMPostContent;
     type: PostType;
+    reactions?: IReaction;
 }

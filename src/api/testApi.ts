@@ -6,11 +6,11 @@ export class TestApi extends BaseApi {
 
 
     public static populateCommentsInFbPostPullerData(request: Hapi.Request, reply: Hapi.IReply) {
-        Promise.all([FbPostPullerService.fetchAllCommentsFromSarcasmAndUpdateFbPostPullerData()]).then((data) => reply(data));
+        Promise.all([FbPostPullerService.fetchNCommentsFromSarcasmAndUpdateFbPostPullerData(2500)]).then((data) => reply(data));
     }
 
     public static populateFbPostPullerData(request: Hapi.Request, reply: Hapi.IReply) {
-        Promise.all([FbPostPullerService.fetchAllPostsFromFbPage()]).then((data) => reply(data));
+        Promise.all([FbPostPullerService.fetchAllPostsFromFbPages()]).then((data) => reply(data));
     }
 
 }

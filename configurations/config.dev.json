@@ -24,6 +24,13 @@
     "postDelayInMinutes": 0,
     "commentCount": 10
   },
+  "reactions": {
+    "postReactionsLow": 10,
+    "postReactionsHi": 30,
+    "commentReactionsLow": 5,
+    "commentReactionsHi": 10
+  },
+
   "fbPostPuller": [
       {
         "pageId": 119554311935735,

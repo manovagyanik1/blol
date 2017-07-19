@@ -8,7 +8,7 @@ export const CommentSchema: Schema = new Schema({
   text: String,
   userId: Schema.Types.ObjectId,
   postId: Schema.Types.ObjectId,
-  numberOfLikes: Schema.Types.Number,
+  reactions: Schema.Types.Mixed,
 }, { timestamps: true });
 
 CommentSchema.index({postId:1, createdAt:1});

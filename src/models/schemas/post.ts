@@ -5,8 +5,9 @@ export interface IPostModel extends IPost, Document {
 }
 
 export const PostSchema: Schema = new Schema({
-  data: Schema.Types.Mixed,
-  type: String,
+    data: Schema.Types.Mixed,
+    type: String,
+    reactions: Schema.Types.Mixed,
 }, { timestamps: true });
 PostSchema.index({createdAt:1});
 
