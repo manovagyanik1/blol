@@ -12,7 +12,9 @@ export default (): IPlugin => {
                 options: {
                     dsn: config.get('sentry:DSN'),
                     settings: {
-                        captureUnhandledRejections: true
+                        captureUnhandledRejections: true,
+                        sampleRate: 1.0,
+                        sendTimeout: 5,
                     },
                     tags: ['sentry-errors']
                 }
