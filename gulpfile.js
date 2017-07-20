@@ -23,7 +23,8 @@ gulp.task('build', function(callback){
 
 gulp.task('copy-build', ['copy-configs', 'typescript']);
 
-gulp.task('run-prod', ['copy-configs', 'create-db-from-dump']);
+// NOTE: removing create-db-from-dump from prod
+gulp.task('run-prod', ['copy-configs']);
 
 gulp.task('copy-configs', function(){
     return gulp.src('./configurations/*.json')
