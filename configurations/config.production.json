@@ -50,9 +50,9 @@
     "mongodb" : {
       "username": "",
       "password": "",
-      "host": "heroku_437n9wks:8vjbq4q8jt25ntfpjvsd9q9a46@ds149412.mlab.com",
-      "port": "49412",
-      "db": "heroku_437n9wks"
+      "host": "localhost",
+      "port": "27017",
+      "db": "lolmenow"
     }
   }
 }
