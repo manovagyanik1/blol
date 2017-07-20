@@ -23,7 +23,7 @@ export class PaginationWrapper {
         }
         const {path, query} = request;
         const queryCopy = Object.assign({}, query);
-        queryCopy['beforeTimeStamp'] = lastResult['createdAt'];
+        queryCopy['beforeTimeStamp'] = lastResult['createdAt'].getTime();
         const queryString = PaginationWrapper.getQueryString(queryCopy);
         return queryString ? `${path}?${queryString}` : path;
     }
@@ -36,7 +36,7 @@ export class PaginationWrapper {
         }
         const {path, query} = request;
         const queryCopy = Object.assign({}, query);
-        queryCopy['afterTimeStamp'] = firstResult['createdAt'];
+        queryCopy['afterTimeStamp'] = firstResult['createdAt'].getTime();
         const queryString = PaginationWrapper.getQueryString(queryCopy);
         return queryString ? `${path}?${queryString}` : path;
     }
