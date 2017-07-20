@@ -3,9 +3,7 @@
     "protocol": "http",
     "apiUrl": "localhost",
     "port": 3000,
-    "webAppProtocol": "http",
-    "webAppUrl": "localhost",
-    "webAppPort": 4200
+    "webAppProtocol": "http"
   },
   "facebook": {
     "appSecret": "a15dfa3968c29bf10d48cfc4cd9fab40",

@@ -3,25 +3,45 @@
     "protocol": "http",
     "apiUrl": "localhost",
     "port": 80,
-    "webAppProtocol": "https",
-    "webAppUrl": "lolmenow.herokuapp.com",
-    "webAppPort": 4200
+    "webAppProtocol": "https"
   },
   "facebook": {
-    "appSecret": "a15dfa3968c29bf10d48cfc4cd9fab40",
-    "appId": "335195490233143",
-    "redirectUri": "https://lolmenow.herokuapp.com/v1/login/callback",
+    "appSecret": "232219f71d1d1a4acb0bb679d3ec3391",
+    "appId": "157511728132373",
+    "redirectUri": "http://lolmenow.com/v1/login/callback",
     "apiVersion": "v2.9",
-    "clientToken": "14105b034fc43eb444d755ec5d57dfd7"
+    "clientToken": "14105b034fc43eb444d755ec5d57dfd7",
+    "permanentAccessToken": "EAAEw28ggKzcBACdJBBZCsls5Xa2j3tl87WZCaOXruXgZAZBhAaj9qbXDoqTyEqjkiODsjw9RcCKQ2peXGR8ra5XAjvz1FRUgQcLMtV8vVbdWZCwOD6j8MZBOms90rUedoiSQmsA2cyrmY5ZCFymAzvtBzVdTphFGEYhFQ0fPktKWwZDZD"
   },
   "sentry": {
     "DSN": "https://6f4fb08e5b15489f9be1874fadcf0dfe:e6bb5562b52c407bbe1edf17f7b45adc@sentry.io/192897"
   },
+  "sarcasmPage": {
+    "pageId": 1515871602074952,
+    "cronString": "",
+    "postDelayInMinutes": 0,
+    "commentCount": 10
+  },
+  "reactions": {
+    "postReactionsLow": 10,
+    "postReactionsHi": 30,
+    "commentReactionsLow": 5,
+    "commentReactionsHi": 10
+  },
+
+  "fbPostPuller": [
+    {
+      "pageId": 119554311935735,
+      "cronString": "",
+      "postDelayInMinutes": 0,
+      "commentCount": 10
+    }
+  ],
   "auth": {
     "enabled": true
   },
   "key":{
-    "privateKey": "lolmenow"
+    "privateKey": "lolmenowedasdflkhouwlnsfgnafsgouegnasjgasldfkj"
   },
   "project": {
     "name": "lolmenow"
