@@ -1,1 +1,1 @@
-{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"lolmenow.comments"}]}
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"lolmenow.comments"},{"v":2,"key":{"postId":1,"createdAt":1},"name":"postId_1_createdAt_1","ns":"lolmenow.comments","background":true}]}

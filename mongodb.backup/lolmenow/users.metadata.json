@@ -1,1 +1,1 @@
-{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"lolmenow.users"}]}
+{"options":{},"indexes":[{"v":2,"key":{"_id":1},"name":"_id_","ns":"lolmenow.users"},{"v":2,"unique":true,"key":{"facebookId":1},"name":"facebookId_1","ns":"lolmenow.users","background":true},{"v":2,"key":{"isFbUser":1},"name":"isFbUser_1","ns":"lolmenow.users","background":true}]}
