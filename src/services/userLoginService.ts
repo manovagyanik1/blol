@@ -27,6 +27,7 @@ export class UserLoginService extends BaseService {
                 const accessToken = res.access_token;
                 const expires = res.expires ? res.expires : 0;
                 FB.options({accessToken});
+                //FB.setAccessToken(accessToken);
 
                 FB.api('/me', {fields: 'id, name, email, picture.type(large)'}, (res) => {
                     if (res && res.error) {
