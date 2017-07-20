@@ -8,7 +8,7 @@ export default class Conf implements IServerConfig {
     private conf: any;
 
     constructor() {
-        const env = process.env.NODE_ENV || "dev";
+        const env = process.env.NODE_ENV || "production";
         const configFolder = __dirname;
         const configFileName = "config." + env + ".json";
 
