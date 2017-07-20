@@ -2,7 +2,7 @@
   "server": {
     "protocol": "http",
     "apiUrl": "localhost",
-    "port": 3000,
+    "port": 80,
     "webAppProtocol": "https",
     "webAppUrl": "lolmenow.herokuapp.com",
     "webAppPort": 4200
