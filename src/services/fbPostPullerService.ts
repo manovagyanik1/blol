@@ -196,7 +196,7 @@ export class FbPostPullerService extends BaseService {
         const postReactionsLow = config.get("reactions:postReactionsLow");
         const postReactionsHi = config.get("reactions:postReactionsHi");
         const commentReactionsLow = config.get("reactions:commentReactionsLow");
-        const commentReactionsHi = config.get("reaction:commentReactionsHi");
+        const commentReactionsHi = config.get("reactions:commentReactionsHi");
         const postReaction = FbPostPullerService.
             generateReaction(RandomUtils.getRandomIntegerInclusive(postReactionsLow, postReactionsHi));
         const post = {type: PostType.IMAGE, data: fbPostImageData, reactions: postReaction} as IPost;

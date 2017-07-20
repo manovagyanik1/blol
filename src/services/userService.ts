@@ -4,7 +4,6 @@ import container from "../libs/ioc";
 import { IServerConfig } from "../../configurations/interfaces";
 import {Schema, Types} from "mongoose";
 import {IUserModel} from "../models/schemas/user";
-import {IUser} from "../models/interfaces/user";
 
 const FB = require("fb");
 const config = container.get<IServerConfig>("IServerConfig");
@@ -66,7 +65,12 @@ export class UserService extends BaseService {
                 isFbUser: true,
             } as IUserModel},
             {upsert: true}
-        ).exec();
+        ).exec()
+            .then((uselessResult) => {
+                return models.User.findOne({facebookId});
+            }).catch((ex) => {
+                return models.User.findOne({facebookId});
+            });
 
     }
 
