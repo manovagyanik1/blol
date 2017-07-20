@@ -10,9 +10,6 @@ import {ICommentModel} from "../models/schemas/comment";
 export class PostService extends BaseService {
 
     public static createPost(post: IPost): Promise<IPostModel> {
-        return new models.Post({
-            data:post.data,
-            type:post.type,
-        }).save();
+        return new models.Post(post).save();
     }
 }

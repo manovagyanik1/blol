@@ -1,5 +1,5 @@
 
-export interface IReaction {
+export interface IReactionsCount {
     LOL: number;
     POOP: number;
 }

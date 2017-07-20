@@ -8,6 +8,6 @@ export interface AMComment {
     createdAt: Schema.Types.Date;
     text: string;
     userDetails: AMUser;
-    reaction: AMUserReactionValue;
+    reactions: AMUserReactionValue;
     currentUserReaction?: ReactionType;
 }

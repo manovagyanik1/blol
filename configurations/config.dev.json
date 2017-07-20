@@ -39,14 +39,6 @@
         "commentCount": 10
       }
   ],
-  "ghostActionsParams": {
-    "reactionsLowerLimit": 5,
-    "reactionsUpperLimit": 30,
-    "commentsLowerLimit": 5,
-    "commentsUpperLimit": 10,
-    "commentLikesLowerLimit": 5,
-    "commentsLikesUpperLimit": 10
-  },
   "auth": {
     "enabled": true
   },

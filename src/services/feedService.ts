@@ -3,7 +3,7 @@ import BaseService from "./baseService";
 import {UserReactionService} from './userReactionService';
 import { models } from '../models';
 import { IPostModel } from "../models/schemas/post";
-import {UserReactionConstructor} from "../apiinterfaces/AMUserReactionValue";
+import {UserReactionConstructor, addReactionsCount} from "../apiinterfaces/AMUserReactionValue";
 import {BeforeAfter} from "../constants/enums/beforeAfter";
 import {Schema, Types} from "mongoose";
 import {AMPost} from "../apiinterfaces/AMPost";
@@ -11,6 +11,7 @@ import {CommentService} from "./commentService";
 
 export class FeedService extends BaseService {
 
+    private static add
     public static getFeed(args: { timestamp: number, type: BeforeAfter, pageSize: number, user: IUserModel }): Promise<AMPost[]> {
         const {timestamp, type, pageSize, user} = args;
         const query = type === BeforeAfter.BEFORE ? {$lt: timestamp} : {$gt: timestamp};
@@ -32,9 +33,12 @@ export class FeedService extends BaseService {
                         const commentCounts = values[1];
                         const postReactions = values[2];
                         return posts.map((post: IPostModel) => {
+
                                 return Object.assign({},
                                     post.toObject(),
-                                    {userReaction: postReactions[post._id] ? postReactions[post._id] : UserReactionConstructor(0, 0)},
+                                    {userReactions:
+                                        addReactionsCount(postReactions[post._id] ? postReactions[post._id] : UserReactionConstructor(0, 0),
+                                            post.reactions ? post.reactions : UserReactionConstructor(0, 0))},
                                     {currentUserReaction: currentUserReactions[post._id] ? currentUserReactions[post._id] : null},
                                     {commentCount: commentCounts[post._id]}
                                 ) as AMPost;

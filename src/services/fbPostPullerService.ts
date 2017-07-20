@@ -20,7 +20,7 @@ import {ICommentModel} from "../models/schemas/comment";
 import {IUserModel} from "../models/schemas/user";
 import {CommentService} from "./commentService";
 import RandomUtils from "../utils/randomUtils";
-import {IReaction} from "../interfaces/iReaction";
+import {IReactionsCount} from "../interfaces/iReactionsCount";
 
 const format = require('string-format');
 const fetch = require('node-fetch');
@@ -183,9 +183,9 @@ export class FbPostPullerService extends BaseService {
         });
     }
 
-    private static generateReaction(n: number): IReaction {
+    private static generateReaction(n: number): IReactionsCount {
         const randomNumberArray = RandomUtils.getXRandomNumbersThatSumToN(2, n);
-        return {LOL: randomNumberArray[0], POOP: randomNumberArray[1]} as IReaction;
+        return {LOL: randomNumberArray[0], POOP: randomNumberArray[1]} as IReactionsCount;
     }
 
     // TODO: make it return the Promise<Post>
@@ -283,20 +283,20 @@ export class FbPostPullerService extends BaseService {
     }
 
 
-    private static updateCommentInLolMeNow(commentResult: any) {
+    private static updateCommentInLolMeNow(commentResult: any): Promise<IFbPostPullerDataModel> {
         console.log("here");
-        models.FbPostPullerData.findOneAndUpdate({
+        return models.FbPostPullerData.findOneAndUpdate({
             status: FbPostStatus.PENDING
         },
             {$set:{
                 status: FbPostStatus.WAITING,
                 "jsonData.comments": commentResult,
-            }});
+            }}).exec();
     }
 
-    public static getFirstNPendingFbPostPullerDataIds(n: number): Promise<IFbPostPullerDataModel[]> {
+    public static getFirstNFbPostPullerDataIdsWithStatus(n: number, status: FbPostStatus): Promise<IFbPostPullerDataModel[]> {
         return models.FbPostPullerData.find({
-            status: FbPostStatus.PENDING
+            status: status
         }).limit(n)
             .exec();
     }

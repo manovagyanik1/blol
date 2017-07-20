@@ -7,7 +7,7 @@ export default class RandomUtils {
         for ( let i = 0; i < x - 1; i++) {
             temp.push( RandomUtils.getRandomIntegerInclusive(0, n));
         }
-        temp.sort();
+        temp.sort((a:number, b:number) => { return a - b; });
         for ( let i = 1; i < temp.length; i ++) {
             ret.push(temp[i] - temp[i - 1]);
         }

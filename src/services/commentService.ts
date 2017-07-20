@@ -6,7 +6,7 @@ import {ICommentModel} from '../models/schemas/comment';
 import {UserReactionService} from './userReactionService';
 import {AMComment} from "../apiinterfaces/AMComment";
 import {UserService} from "./userService";
-import {UserReactionConstructor} from "../apiinterfaces/AMUserReactionValue";
+import {UserReactionConstructor, addReactionsCount} from "../apiinterfaces/AMUserReactionValue";
 import {IComment} from "../models/interfaces/comment";
 import {Schema} from "mongoose";
 
@@ -72,7 +72,11 @@ export class CommentService extends BaseService {
                             return Object.assign({}, comment.toObject(),
                                 user ? {currentUserReaction: tCommentIdToThisUserReaction[user._id]} : {},
                                 {userDetails: tUserIdToUserInfo[comment.userId as any]},
-                                {reaction: tCommentIdToUserReactions[comment._id] ?  tCommentIdToUserReactions[comment._id] : UserReactionConstructor(0, 0)}) as AMComment;
+                                {reactions:
+                                    addReactionsCount(tCommentIdToUserReactions[comment._id] ?  tCommentIdToUserReactions[comment._id] : UserReactionConstructor(0, 0),
+                                    comment.reactions ? comment.reactions : UserReactionConstructor(0, 0)
+                                    )
+                                }) as AMComment;
                         });
 
 
@@ -85,10 +89,6 @@ export class CommentService extends BaseService {
     }
 
     public static postComment(comment: IComment): Promise<ICommentModel> {
-        return new models.Comment({
-            text: comment.text,
-            postId: comment.postId,
-            userId: comment.userId,
-        }).save();
+        return new models.Comment(comment).save();
     }
 }

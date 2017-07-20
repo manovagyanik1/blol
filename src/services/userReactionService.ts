@@ -6,7 +6,7 @@ import {Schema, Types} from 'mongoose';
 import {IUserReactionModel} from '../models/schemas/userReaction';
 import {ReactionType} from '../constants/enums/reactionType';
 import {TargetType} from '../constants/enums/targetType';
-import { IReaction } from "../interfaces/iReaction";
+import { IReactionsCount } from "../interfaces/iReactionsCount";
 import {IUser} from "../models/interfaces/user";
 
 export class UserReactionService extends BaseService {
@@ -78,7 +78,7 @@ export class UserReactionService extends BaseService {
             ])
             .exec()
             .then((userReactions: Object[] ) =>
-                userReactions.reduce((pre, userReaction:IReaction) => {
+                userReactions.reduce((pre, userReaction:IReactionsCount) => {
                     const {LOL, POOP} = userReaction;
                     pre[userReaction['targetId']] = {LOL, POOP};
                     return pre;

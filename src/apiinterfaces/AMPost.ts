@@ -8,7 +8,7 @@ export interface AMPost {
     createdAt: Schema.Types.Date;
     data: AMPostContent;
     type: PostType;
-    userReaction: AMUserReactionValue;
+    userReactions: AMUserReactionValue;
     commentCount: number;
     currentUserReaction?: ReactionType;
 }

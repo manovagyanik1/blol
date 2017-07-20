@@ -4,6 +4,7 @@ import {FeedService} from "../services/feedService";
 import {FbPostPullerService} from "../services/fbPostPullerService";
 import {IFbPostPullerDataModel} from "../models/schemas/fbPostPullerData";
 import {Schema} from "mongoose";
+import {FbPostStatus} from "../constants/enums/fbPostStatus";
 
 export class FbPostPullerApi extends BaseApi {
 
@@ -30,8 +31,8 @@ export class FbPostPullerApi extends BaseApi {
     }
 
     public static copyDataFromFbPostPullerToUserFacing(request: Hapi.Request, reply: Hapi.IReply) {
-        const {query: {limit}} = request;
-        return FbPostPullerService.getFirstNPendingFbPostPullerDataIds(limit)
+        const {payload: {limit}} = request;
+        return FbPostPullerService.getFirstNFbPostPullerDataIdsWithStatus(limit, FbPostStatus.WAITING)
             .then((results: IFbPostPullerDataModel[]) => {
                 return results.map((result: IFbPostPullerDataModel) => {
                     return result._id;
