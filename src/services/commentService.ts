@@ -72,7 +72,7 @@ export class CommentService extends BaseService {
                             return Object.assign({}, comment.toObject(),
                                 user ? {currentUserReaction: tCommentIdToThisUserReaction[user._id]} : {},
                                 {userDetails: tUserIdToUserInfo[comment.userId as any]},
-                                {reactions:
+                                {userReactions:
                                     addReactionsCount(tCommentIdToUserReactions[comment._id] ?  tCommentIdToUserReactions[comment._id] : UserReactionConstructor(0, 0),
                                     comment.reactions ? comment.reactions : UserReactionConstructor(0, 0)
                                     )
