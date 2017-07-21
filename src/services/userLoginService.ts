@@ -18,12 +18,12 @@ export class UserLoginService extends BaseService {
                     reject(res.error);
                 } else {
 
-                    const {id, name, email, picture: {data: {profilePicUrl}}} = res;
+                    const {id, name, email, picture: {data: {url}}} = res;
                     UserService.createUserOrUpdateIfExisting({
                         facebookId: id,
                         fullName: name,
                         email: email,
-                        profilePicUrl: profilePicUrl,
+                        profilePicUrl: url,
                     })
                         .then((data) => {
                             // get JWT token and insert into request/response
