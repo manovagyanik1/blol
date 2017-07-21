@@ -7,15 +7,17 @@ export = [
         path: '/feed',
         handler: FeedApi.getFeed,
         config: {
-            auth: false,
             tags: ['api', 'feed'],
             description: 'get feed',
             validate: {
-                  query: {
+                query: {
                     beforeTimeStamp: Joi.date().timestamp(),
                     afterTimeStamp: Joi.date().timestamp(),
                     pageSize: Joi.number().default(10),
-                }
+                },
+                headers: Joi.object({
+                    'authorization': Joi.string().required()
+                }).unknown()
             },
             plugins: {
                 'hapi-swagger': {

@@ -28,11 +28,12 @@ export class UserReactionService extends BaseService {
             {
                 $match: {
                     targetId: {$in: targetIds},
-                    userId: user._id
+                    userId: Types.ObjectId(user._id)
                 }
             },
         ]).exec()
             .then((userReactions: Object[]) => {
+                console.log(userReactions);
                 const targetIdToThisUserReaction = targetIds.reduce((accumulator, targetId:Schema.Types.ObjectId) => {
                     accumulator[targetId.toString()] = null;
                     return accumulator;
