@@ -10,6 +10,31 @@ const config = container.get<IServerConfig>("IServerConfig");
 
 export class UserLoginService extends BaseService {
 
+    public static getLoginTokenFromAccessToken(accessToken: String) : Promise<any> {
+        return new Promise((resolve, reject) => {
+            FB.setAccessToken(accessToken);
+            FB.api('/me', {fields: 'id, name, email, picture.type(large)'}, (res) => {
+                if (res && res.error) {
+                    reject(res.error);
+                } else {
+
+                    const {id, name, email, picture: {data: {profilePicUrl}}} = res;
+                    UserService.createUserOrUpdateIfExisting({
+                        facebookId: id,
+                        fullName: name,
+                        email: email,
+                        profilePicUrl: profilePicUrl,
+                    })
+                        .then((data) => {
+                            // get JWT token and insert into request/response
+                            const jwtToken: string = JWTUtils.signJWTToken(data.toObject());
+                            resolve({token: jwtToken, userId: data._id});
+                        });
+                }
+            });
+        });
+    }
+
     // return the login token if the user already exists in the db,
     // create a new user if the user is not there in the db.
     public static getLoginToken(code: String): Promise<any> {
@@ -26,28 +51,9 @@ export class UserLoginService extends BaseService {
 
                 const accessToken = res.access_token;
                 const expires = res.expires ? res.expires : 0;
-                FB.options({accessToken});
-                //FB.setAccessToken(accessToken);
-
-                FB.api('/me', {fields: 'id, name, email, picture.type(large)'}, (res) => {
-                    if (res && res.error) {
-                        reject(res.error);
-                    } else {
-
-                        const {id, name, email, picture: {data: {profilePicUrl}}} = res;
-                        UserService.createUserOrUpdateIfExisting({
-                            facebookId: id,
-                            fullName: name,
-                            email: email,
-                            profilePicUrl: profilePicUrl,
-                        })
-                        .then((data) => {
-                            // get JWT token and insert into request/response
-                            const jwtToken: string = JWTUtils.signJWTToken(data.toObject());
-                            resolve({token: jwtToken, userId: data._id});
-                        });
-                    }
-                });
+                UserLoginService.getLoginTokenFromAccessToken(accessToken)
+                    .then(data => resolve(data))
+                    .catch(err => reject(err));
             });
         });
     }
