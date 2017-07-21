@@ -5,6 +5,7 @@ import * as Hapi from 'hapi';
 import BaseApi from "./baseApi";
 import {CommentService} from "../services/commentService";
 import {ICommentModel} from "../models/schemas/comment";
+import {AMComment} from "../apiinterfaces/AMComment";
 
 export class CommentApi extends BaseApi {
     public static getComment(request: Hapi.Request, reply: Hapi.IReply) {
@@ -26,7 +27,7 @@ export class CommentApi extends BaseApi {
         const {payload: {postId, text}} = request;
         const user: IUserModel = request.auth.credentials;
         CommentService.postComment({postId, text, userId: user._id})
-            .then((data: ICommentModel) => {
+            .then((data: AMComment) => {
                 reply(data);
             });
     }

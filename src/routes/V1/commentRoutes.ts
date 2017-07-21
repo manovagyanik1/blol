@@ -7,7 +7,6 @@ export = [
         path: '/comments/{postId}',
         handler: CommentApi.getComment,
         config: {
-            auth: false,
             tags: ['api', 'comment'],
             description: 'get comment',
             validate: {
@@ -18,7 +17,10 @@ export = [
                 },
                 params: {
                     postId: Joi.string(),
-                }
+                },
+                headers: Joi.object({
+                    'authorization': Joi.string().required()
+                }).unknown()
             },
             plugins: {
                 'hapi-swagger': {

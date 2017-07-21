@@ -9,6 +9,7 @@ import {UserService} from "./userService";
 import {UserReactionConstructor, addReactionsCount} from "../apiinterfaces/AMUserReactionValue";
 import {IComment} from "../models/interfaces/comment";
 import {Schema} from "mongoose";
+import {IPostModel} from "../models/schemas/post";
 
 export class CommentService extends BaseService {
 
@@ -69,9 +70,10 @@ export class CommentService extends BaseService {
                         const tUserIdToUserInfo = values[1];
                         const tCommentIdToUserReactions = values[2];
                         return comments.map((comment:ICommentModel) => {
+                            const currentUserReaction = user ? {currentUserReaction: tCommentIdToThisUserReaction[comment._id]} : {};
                             return Object.assign({}, comment.toObject(),
-                                user ? {currentUserReaction: tCommentIdToThisUserReaction[user._id]} : {},
-                                {userDetails: tUserIdToUserInfo[comment.userId as any]},
+                                currentUserReaction,
+                                {userDetails: tUserIdToUserInfo[comment.userId.toString()]},
                                 {userReactions:
                                     addReactionsCount(tCommentIdToUserReactions[comment._id] ?  tCommentIdToUserReactions[comment._id] : UserReactionConstructor(0, 0),
                                     comment.reactions ? comment.reactions : UserReactionConstructor(0, 0)
@@ -88,7 +90,19 @@ export class CommentService extends BaseService {
         });
     }
 
-    public static postComment(comment: IComment): Promise<ICommentModel> {
-        return new models.Comment(comment).save();
+    public static postComment(comment: IComment): Promise<AMComment> {
+        return new models.Comment(comment).save()
+            .then((data: ICommentModel) => {
+                return UserService.getForIds([data.userId])
+                    .then((results: IUserModel[]) => {
+                    return Object.assign({},
+                        data.toObject(),
+                        {userDetails: results[0]},
+                        {userReactions: UserReactionConstructor(0, 0)},
+                        {currentUserReaction: null}
+                    ) as AMComment;
+                });
+            });
+
     }
 }

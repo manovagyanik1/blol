@@ -10,7 +10,7 @@ export = [
             validate: {
                 payload: {
                     targetId: Joi.string(),
-                    reaction: Joi.string().valid('LOL', 'HAHA', 'WOW', 'CLAP', 'LIKE'),
+                    reaction: Joi.string().valid('LOL', 'POOP'),
                     type: Joi.string().valid('COMMENT', 'POST')
                 },
                 headers: Joi.object({

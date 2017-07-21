@@ -33,9 +33,14 @@ export class UserReactionService extends BaseService {
             },
         ]).exec()
             .then((userReactions: Object[]) => {
-                return userReactions.reduce((targetIdToUserReaction, userReaction: IUserReactionModel) => {
-                    return targetIdToUserReaction[userReaction['targetId']] = userReaction;
+                const targetIdToThisUserReaction = targetIds.reduce((accumulator, targetId:Schema.Types.ObjectId) => {
+                    accumulator[targetId.toString()] = null;
+                    return accumulator;
                 }, {});
+                return userReactions.reduce((targetIdToUserReaction, userReaction: IUserReactionModel) => {
+                    targetIdToUserReaction[userReaction['targetId'].toString()] = userReaction.reaction;
+                    return targetIdToUserReaction;
+                }, targetIdToThisUserReaction);
             }) : {};
     }
 
