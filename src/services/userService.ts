@@ -2,7 +2,7 @@ import BaseService from "./baseService";
 import { models } from '../models';
 import container from "../libs/ioc";
 import { IServerConfig } from "../../configurations/interfaces";
-import {Schema, Types} from "mongoose";
+import {Schema} from "mongoose";
 import {IUserModel} from "../models/schemas/user";
 
 const FB = require("fb");
@@ -77,11 +77,16 @@ export class UserService extends BaseService {
     public static createUserOrUpdateIfExisting(args:{facebookId, fullName, email, profilePicUrl}): Promise<IUserModel> {
         return models.User.findOneAndUpdate({
             facebookId: args.facebookId,
+        }, {
+            facebookId: args.facebookId,
             fullName: args.fullName,
-            email: args.email,
             nickName: UserService.getNickName(args.fullName),
+            email: args.email,
             profilePicUrl: args.profilePicUrl,
-        }, {}, {upsert: true, new: true, setDefaultsOnInsert: true})
+        }, {
+            upsert: true,
+            new: true,
+            setDefaultsOnInsert: true})
             .exec();
     }
 
